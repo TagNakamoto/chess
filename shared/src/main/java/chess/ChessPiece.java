@@ -56,6 +56,15 @@ public class ChessPiece {
         ChessGame.TeamColor pieceColor = piece.getTeamColor();
         //use switch statement to switch into relevant subclass, return what piecemoves in subclass returns
 
+        switch (piece.type) {
+            case BISHOP:
+                System.out.println("Bishop");
+                break;
+
+        }
+
+
+
         return new ArrayList<>(); //STILL IMPLEMENT PLS
     }
 
@@ -81,4 +90,5 @@ public class ChessPiece {
     }
 }
 
-//Make class of ChessMovement, create subclasses for each piece type, piecemoves method in this class
+
+
