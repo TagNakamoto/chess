@@ -10,14 +10,17 @@ import java.util.Collection;
  * signature of the existing methods.
  */
 public class ChessPiece {
-
+    private final ChessGame.TeamColor pieceColor;
+    private ChessPiece.PieceType type;
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
+        this.pieceColor = pieceColor;
+        this.type = type;
     }
 
     /**
      * The various different chess piece options
      */
-    public enum PieceType {
+    public enum PieceType { //data type
         KING,
         QUEEN,
         BISHOP,
@@ -47,7 +50,14 @@ public class ChessPiece {
      *
      * @return Collection of valid moves
      */
-    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) { //TOUGH ONE, need board
+        ChessPiece piece = board.getPiece(myPosition);
+        ChessGame.TeamColor pieceColor = piece.getTeamColor();
+
         return new ArrayList<>(); //STILL IMPLEMENT PLS
     }
+
+    //Make class of chess movement rules
 }
+
+// getTeamColor is not too bad
