@@ -7,10 +7,30 @@ import java.util.Collection;
 public class ChessMovement {
     protected ChessBoard board;
     protected  ChessPosition position;
+    protected ChessGame.TeamColor teamColor;
     public ChessMovement(ChessBoard board, ChessPosition position) {
         this.board = board;
         this.position = position;
     }
+    public Boolean hasPiece(ChessPosition nextMove){
+        return (board.getPiece(nextMove) != null);
+    }
+    public Boolean isBounds(ChessPosition nextMove){
+        if((nextMove.getColumn() > 7) || (nextMove.getColumn() < 0)){
+            return false;
+        }
+        else if((nextMove.getRow() > 7) || (nextMove.getRow() < 0)){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    public Boolean isSameTeam(ChessPosition nextMove){
+        ChessGame.TeamColor moveColor = board.getPiece(nextMove).getTeamColor();
+        return moveColor == teamColor;
+    }
+    //Functions: isSameTeam
 }
 class Bishop extends ChessMovement {
     public Bishop(ChessBoard board, ChessPosition position) {
@@ -24,4 +44,5 @@ class Bishop extends ChessMovement {
         moves.add(tempMove);
         return moves;
     }
+
 }
