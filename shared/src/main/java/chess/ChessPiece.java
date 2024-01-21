@@ -55,17 +55,19 @@ public class ChessPiece {
         ChessPiece piece = board.getPiece(myPosition);
         ChessGame.TeamColor pieceColor = piece.getTeamColor();
         //use switch statement to switch into relevant subclass, return what piecemoves in subclass returns
-
+        Collection<ChessMove> moves = new ArrayList<ChessMove>();
         switch (piece.type) {
             case BISHOP:
                 System.out.println("Bishop");
+                Bishop Bishop = new Bishop(board, myPosition);
+                moves = Bishop.pieceMoves();
                 break;
 
         }
 
 
 
-        return new ArrayList<>(); //STILL IMPLEMENT PLS
+        return moves; //STILL IMPLEMENT PLS
     }
 
     @Override
