@@ -59,11 +59,20 @@ public class ChessPiece {
         Collection<ChessMove> moves = new ArrayList<ChessMove>();
         switch (piece.type) {
             case BISHOP:
-                System.out.println("Bishop");
+//                System.out.println("Bishop");
                 Bishop Bishop = new Bishop(board, myPosition);
                 moves = Bishop.pieceMoves();
                 break;
-
+            case ROOK:
+//                System.out.println("Rook");
+                Rook Rook = new Rook(board, myPosition);
+                moves = Rook.pieceMoves();
+                break;
+            case QUEEN:
+//                System.out.println("Queen");
+                Queen Queen = new Queen(board, myPosition);
+                moves = Queen.pieceMoves();
+                break;
         }
 
 

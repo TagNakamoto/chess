@@ -66,3 +66,45 @@ class Bishop extends ChessMovement {
         return moves;
     }
 }
+
+class Rook extends ChessMovement {
+    public Rook(ChessBoard board, ChessPosition position) {
+        super(board, position);
+    }
+
+    public Collection<ChessMove> pieceMoves() {
+        ArrayList<ChessMove> moves = new ArrayList<>();
+
+        generateMovesInDirection(1, 0, moves);  // Up
+        generateMovesInDirection(-1, 0, moves); // Down
+        generateMovesInDirection(0, -1, moves); // Left
+        generateMovesInDirection(0, 1, moves);// Right
+
+        return moves;
+    }
+}
+
+class Queen extends ChessMovement {
+    public Queen(ChessBoard board, ChessPosition position) {
+        super(board, position);
+    }
+
+    public Collection<ChessMove> pieceMoves() {
+        ArrayList<ChessMove> moves = new ArrayList<>();
+
+        //Bishop moves
+        generateMovesInDirection(1, 1, moves);  // Right Up
+        generateMovesInDirection(-1, 1, moves); // Right Down
+        generateMovesInDirection(1, -1, moves); // Left Up
+        generateMovesInDirection(-1, -1, moves);// Left Down
+
+        //Rook moves
+        generateMovesInDirection(1, 0, moves);  // Up
+        generateMovesInDirection(-1, 0, moves); // Down
+        generateMovesInDirection(0, -1, moves); // Left
+        generateMovesInDirection(0, 1, moves);// Right
+
+        return moves;
+    }
+}
+
