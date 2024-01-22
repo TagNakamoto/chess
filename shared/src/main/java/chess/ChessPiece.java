@@ -53,6 +53,7 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) { //TOUGH ONE, need board
         ChessPiece piece = board.getPiece(myPosition);
+        System.out.println(myPosition);
         ChessGame.TeamColor pieceColor = piece.getTeamColor();
         //use switch statement to switch into relevant subclass, return what piecemoves in subclass returns
         Collection<ChessMove> moves = new ArrayList<ChessMove>();
@@ -87,9 +88,10 @@ public class ChessPiece {
     public String toString() {
         return "ChessPiece{" +
                 "pieceColor=" + pieceColor +
-                ", type=" + type +
+                ", type=" + type + ", " +
                 '}';
     }
+
 }
 
 
