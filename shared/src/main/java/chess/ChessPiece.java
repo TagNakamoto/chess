@@ -73,6 +73,16 @@ public class ChessPiece {
                 Queen Queen = new Queen(board, myPosition);
                 moves = Queen.pieceMoves();
                 break;
+            case KNIGHT:
+//                System.out.println("Knight");
+                Knight Knight = new Knight(board, myPosition);
+                moves = Knight.pieceMoves();
+                break;
+            case KING:
+//                System.out.println("King");
+                King King = new King(board, myPosition);
+                moves = King.pieceMoves();
+                break;
         }
 
 

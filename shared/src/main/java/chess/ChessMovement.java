@@ -108,3 +108,73 @@ class Queen extends ChessMovement {
     }
 }
 
+class Knight extends ChessMovement {
+    public Knight(ChessBoard board, ChessPosition position) {
+        super(board, position);
+    }
+
+    public Collection<ChessMove> pieceMoves() {
+        ArrayList<ChessMove> moves = new ArrayList<>();
+        int startRow = position.getRow();
+        int startCol = position.getColumn();
+        int[][] LShape = {
+                {2,1},
+                {2,-1},
+                {1,2},
+                {-1,2},
+                {-2,1},
+                {-2,-1},
+                {-1,-2},
+                {1,-2}
+        };
+        for (int[] row : LShape) {
+            int rowIncrement = row[0];
+            int columnIncrement = row[1];
+            int newRow = startRow + rowIncrement;
+            int newCol = startCol + columnIncrement;
+            if((newRow>0 && newRow<9) && (newCol>0 && newCol<9)){
+                ChessPosition nextPosition = new ChessPosition(newRow, newCol);
+                ChessMove tempMove = new ChessMove(position, nextPosition);
+                if(noPiece(nextPosition) || !isSameTeam(nextPosition)){
+                    moves.add(tempMove);
+                }
+            }
+        }
+        return moves;
+    }
+}
+class King extends ChessMovement {
+    public King(ChessBoard board, ChessPosition position) {
+        super(board, position);
+    }
+
+    public Collection<ChessMove> pieceMoves() {
+        ArrayList<ChessMove> moves = new ArrayList<>();
+        int startRow = position.getRow();
+        int startCol = position.getColumn();
+        int[][] KingBox = {
+                {1,0}, //up
+                {1,1}, //upRight
+                {0,1}, //Right
+                {-1,1}, //RightDown
+                {-1,0}, //Down
+                {-1,-1}, //LeftDown
+                {0,-1}, //Left
+                {1,-1} //LeftUp
+        };
+        for (int[] row : KingBox) {
+            int rowIncrement = row[0];
+            int columnIncrement = row[1];
+            int newRow = startRow + rowIncrement;
+            int newCol = startCol + columnIncrement;
+            if((newRow>0 && newRow<9) && (newCol>0 && newCol<9)){
+                ChessPosition nextPosition = new ChessPosition(newRow, newCol);
+                ChessMove tempMove = new ChessMove(position, nextPosition);
+                if(noPiece(nextPosition) || !isSameTeam(nextPosition)){
+                    moves.add(tempMove);
+                }
+            }
+        }
+        return moves;
+    }
+}
