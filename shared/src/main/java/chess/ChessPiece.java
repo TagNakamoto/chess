@@ -83,11 +83,22 @@ public class ChessPiece {
                 King King = new King(board, myPosition);
                 moves = King.pieceMoves();
                 break;
+            case PAWN:
+//                System.out.println("King");
+                if(piece.pieceColor == ChessGame.TeamColor.BLACK){
+                    BlackPawn BlackPawn = new BlackPawn(board, myPosition);
+                    moves = BlackPawn.pieceMoves();
+                }
+                else if(piece.pieceColor == ChessGame.TeamColor.WHITE){
+                    WhitePawn WhitePawn = new WhitePawn(board, myPosition);
+                    moves = WhitePawn.pieceMoves();
+                }
+                break;
         }
 
 
 
-        return moves; //STILL IMPLEMENT PLS
+        return moves;
     }
 
     @Override
