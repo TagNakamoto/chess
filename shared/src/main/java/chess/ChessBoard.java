@@ -60,7 +60,11 @@ public class ChessBoard {
         squares[1][6] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
         squares[1][7] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
 
-
+        for(int i=2; i<6; i++){
+            for(int j=0; j<8; j++) {
+                squares[i][j] = null;
+            }
+        }
         //Black Pieces
         squares[7][0] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
         squares[7][1] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);

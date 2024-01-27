@@ -21,19 +21,6 @@ public class ChessMovement {
         return moveColor == teamColor;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ChessMovement that = (ChessMovement) o;
-        return Objects.deepEquals(board, that.board) && Objects.equals(position, that.position) && teamColor == that.teamColor;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(board, position, teamColor);
-    }
-
     protected void generateMovesInDirection(int rowIncrement, int colIncrement, ArrayList<ChessMove> moves) {
         int startRow = position.getRow();
         int startCol = position.getColumn();
@@ -80,6 +67,18 @@ public class ChessMovement {
                 }
             }
         }
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessMovement that = (ChessMovement) o;
+        return Objects.deepEquals(board, that.board) && Objects.equals(position, that.position) && teamColor == that.teamColor;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(board, position, teamColor);
     }
 }
 class Bishop extends ChessMovement {
