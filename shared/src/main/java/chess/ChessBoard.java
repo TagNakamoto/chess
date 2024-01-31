@@ -8,7 +8,7 @@ import java.util.Arrays;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
-public class ChessBoard {
+public class ChessBoard implements Cloneable {
     private ChessPiece[][] squares = new ChessPiece[8][8];
     public ChessBoard() {
         
@@ -35,6 +35,12 @@ public class ChessBoard {
         return squares[position.getRow()-1][position.getColumn()-1];
     }
 
+    /**
+     * Removes piece from square (sets square to null)
+     */
+    public void removePiece(ChessPosition position) {
+        squares[position.getRow()][position.getColumn()] = null;
+    }
     /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
