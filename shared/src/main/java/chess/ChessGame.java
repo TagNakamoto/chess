@@ -53,7 +53,7 @@ public class ChessGame {
         ChessPiece piece = myBoard.getPiece(startPosition);
         if(piece == null){return null;}
         Collection<ChessMove> possibleMoves = piece.pieceMoves(myBoard,startPosition);
-        /*THIS NEEDS TO ACTUALLY BE IMPLEMENTED*/
+        /*THIS NEEDS TO ACTUALLY BE IMPLEMENTED: idea - if move in possibleMoves puts you in check, remove it*/
         return possibleMoves;
     }
 
@@ -64,7 +64,8 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        myBoard.addPiece(move.getEndPosition(), myBoard.getPiece(move.getStartPosition()));
+        myBoard.removePiece(move.getStartPosition());
     }
 
     /**
@@ -75,7 +76,21 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
         ChessPosition kingPosition = findKing(teamColor);
-        throw new RuntimeException("Not implemented");
+        for (int i=1; i<9; i++) {
+            for (int j=1; j<9; j++){
+                ChessPosition currPosition = new ChessPosition(i,j);
+                ChessPiece piece = myBoard.getPiece(currPosition);
+                if(piece == null){
+                    continue;
+                }
+                Collection<ChessMove> moves = piece.pieceMoves(myBoard, currPosition);
+                for (ChessMove move : moves){
+                    if(move.getEndPosition().equals(kingPosition))
+                        return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -118,17 +133,13 @@ public class ChessGame {
     }
 
     public ChessPosition findKing(TeamColor teamColor){
-        int row = 0;
-        int increment = 1;
-        if(teamColor == TeamColor.BLACK){
-            row = 7;
-            increment = -1;
-        }
-        for (int i=row; i<(4+4*increment); i+=increment){
-            for (int j=0; j<8; j++){
+        for (int i=1; i<9; i++){
+            for (int j=1; j<9; j++){
                 ChessPosition tempPosition = new ChessPosition(i,j);
                 ChessPiece tempPiece =myBoard.getPiece(tempPosition);
-                if(tempPiece.getPieceType() == ChessPiece.PieceType.KING && (tempPiece.getTeamColor()==teamColor)) {
+                if(tempPiece == null) {
+                }
+                else if(tempPiece.getPieceType() == ChessPiece.PieceType.KING && (tempPiece.getTeamColor()==teamColor)) {
                     return tempPosition;
                 }
             }
