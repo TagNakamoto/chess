@@ -191,6 +191,7 @@ class BlackPawn extends ChessMovement{
         ArrayList<ChessMove> moves = new ArrayList<>();
         int startRow = position.getRow();
         int startCol = position.getColumn();
+
         ChessPiece.PieceType [] promotionArray =  {ChessPiece.PieceType.BISHOP,
                 ChessPiece.PieceType.ROOK, ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.QUEEN};
         ChessPosition firstSquare = new ChessPosition(startRow-1,startCol);
@@ -203,6 +204,7 @@ class BlackPawn extends ChessMovement{
                 moves.add(new ChessMove(position,secondSquare)) ;
             }
         }
+
 
         if(startRow == 2){
             for(ChessPiece.PieceType promotionPiece : promotionArray){
@@ -281,4 +283,5 @@ class WhitePawn extends ChessMovement{
         }
         return moves;
     }
+
 }

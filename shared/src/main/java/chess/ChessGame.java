@@ -2,6 +2,8 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -51,11 +53,40 @@ public class ChessGame {
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ChessPiece piece = myBoard.getPiece(startPosition);
-        if(piece == null){return null;}
-        Collection<ChessMove> possibleMoves = piece.pieceMoves(myBoard,startPosition);
-        /*THIS NEEDS TO ACTUALLY BE IMPLEMENTED: idea - if move in possibleMoves puts you in check, remove it*/
+        if (piece == null) {
+            return null;
+        }
+
+        Collection<ChessMove> possibleMoves = piece.pieceMoves(myBoard, startPosition);
+        Iterator<ChessMove> iterator = possibleMoves.iterator();
+
+        while (iterator.hasNext()) {
+            ChessMove move = iterator.next();
+            ChessPosition endSquare = move.getEndPosition();
+            ChessPiece capturedPiece = myBoard.getPiece(endSquare); // Store the piece being captured
+
+            // Temporarily make the move
+            myBoard.addPiece(endSquare, myBoard.getPiece(startPosition));
+            myBoard.removePiece(startPosition);
+
+            // Check if the player's king is in check after making the move
+            TeamColor currTeam = piece.getTeamColor();
+            if (isInCheck(currTeam)) {
+                // Move puts the king in check, so remove it from possible moves
+                iterator.remove();
+            }
+
+            // Undo the temporary move
+            myBoard.addPiece(startPosition, myBoard.getPiece(endSquare));
+            myBoard.removePiece(endSquare);
+            if (capturedPiece != null) {
+                myBoard.addPiece(endSquare, capturedPiece); // Restore the captured piece if any
+            }
+        }
+
         return possibleMoves;
     }
+
 
     /**
      * Makes a move in a chess game
@@ -147,6 +178,24 @@ public class ChessGame {
         throw new RuntimeException("King not found");
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessGame chessGame = (ChessGame) o;
+        return Objects.deepEquals(myBoard, chessGame.myBoard) && turnColor == chessGame.turnColor;
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(myBoard, turnColor);
+    }
 
+    @Override
+    public String toString() {
+        return "ChessGame{" +
+                "myBoard=" + myBoard +
+                ", turnColor=" + turnColor +
+                '}';
+    }
 }
