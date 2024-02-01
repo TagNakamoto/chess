@@ -39,7 +39,7 @@ public class ChessBoard implements Cloneable {
      * Removes piece from square (sets square to null)
      */
     public void removePiece(ChessPosition position) {
-        squares[position.getRow()][position.getColumn()] = null;
+        squares[position.getRow()-1][position.getColumn()-1] = null;
     }
     /**
      * Sets the board to the default starting board
