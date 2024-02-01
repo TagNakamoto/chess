@@ -56,7 +56,7 @@ public class ChessGame {
         if (piece == null) {
             return null;
         }
-
+        TeamColor currTeam = piece.getTeamColor();
         Collection<ChessMove> possibleMoves = piece.pieceMoves(myBoard, startPosition);
         Iterator<ChessMove> iterator = possibleMoves.iterator();
 
@@ -66,11 +66,16 @@ public class ChessGame {
             ChessPiece capturedPiece = myBoard.getPiece(endSquare); // Store the piece being captured
 
             // Temporarily make the move
-            myBoard.addPiece(endSquare, myBoard.getPiece(startPosition));
+            if(move.getPromotionPiece() == null) {
+                myBoard.addPiece(endSquare, myBoard.getPiece(startPosition));
+            }
+            else{
+                ChessPiece tempPiece = new ChessPiece(currTeam, move.getPromotionPiece());
+                myBoard.addPiece(endSquare, tempPiece);
+            }
             myBoard.removePiece(startPosition);
 
             // Check if the player's king is in check after making the move
-            TeamColor currTeam = piece.getTeamColor();
             if (isInCheck(currTeam)) {
                 // Move puts the king in check, so remove it from possible moves
                 iterator.remove();
