@@ -195,8 +195,18 @@ class BlackPawn extends ChessMovement{
         ChessPiece.PieceType [] promotionArray =  {ChessPiece.PieceType.BISHOP,
                 ChessPiece.PieceType.ROOK, ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.QUEEN};
         ChessPosition firstSquare = new ChessPosition(startRow-1,startCol);
-        ChessPosition rightDown = new ChessPosition(startRow-1,startCol+1);
-        ChessPosition leftDown = new ChessPosition(startRow-1,startCol-1);
+        ChessPosition rightDown = null;
+        ChessPosition leftDown = null;
+        boolean enemyLeftDown = false;
+        boolean enemyRightDown= false;
+        if(startCol<8) {
+            rightDown = new ChessPosition(startRow - 1, startCol + 1);
+            enemyRightDown = (!noPiece(rightDown) && !isSameTeam(rightDown));
+        }
+        if(startCol>1){
+            leftDown = new ChessPosition(startRow-1,startCol-1);
+            enemyLeftDown = (!noPiece(leftDown) && !isSameTeam(leftDown));
+        }
 
         if(startRow == 7){
             ChessPosition secondSquare = new ChessPosition(startRow-2,startCol);
@@ -211,10 +221,10 @@ class BlackPawn extends ChessMovement{
                 if(noPiece(firstSquare)){
                     moves.add(new ChessMove(position,firstSquare,promotionPiece));
                 }
-                if(!noPiece(rightDown) && !isSameTeam(rightDown)){
+                if(enemyRightDown){
                     moves.add(new ChessMove(position,rightDown,promotionPiece));
                 }
-                if(!noPiece(leftDown) && !isSameTeam(leftDown)){
+                if(enemyLeftDown){
                     moves.add(new ChessMove(position,leftDown,promotionPiece));
                 }
             }
@@ -224,10 +234,10 @@ class BlackPawn extends ChessMovement{
             if(noPiece(firstSquare)){
                 moves.add(new ChessMove(position,firstSquare));
             }
-            if(!noPiece(rightDown) && !isSameTeam(rightDown)){
+            if(enemyRightDown){
                 moves.add(new ChessMove(position,rightDown));
             }
-            if(!noPiece(leftDown) && !isSameTeam(leftDown)){
+            if(enemyLeftDown){
                 moves.add(new ChessMove(position,leftDown));
             }
         }
@@ -246,8 +256,19 @@ class WhitePawn extends ChessMovement{
         ChessPiece.PieceType [] promotionArray =  {ChessPiece.PieceType.BISHOP,
                 ChessPiece.PieceType.ROOK, ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.QUEEN};
         ChessPosition firstSquare = new ChessPosition(startRow+1,startCol);
-        ChessPosition rightUp = new ChessPosition(startRow+1,startCol+1);
-        ChessPosition leftUp = new ChessPosition(startRow+1,startCol-1);
+        ChessPosition rightUp = null;
+        ChessPosition leftUp = null;
+        boolean enemyLeftUp = false;
+        boolean enemyRightUp = false;
+        if(startCol<8) {
+            rightUp = new ChessPosition(startRow + 1, startCol + 1);
+            enemyRightUp = (!noPiece(rightUp) && !isSameTeam(rightUp));
+        }
+        if(startCol>1){
+            leftUp = new ChessPosition(startRow+1,startCol-1);
+            enemyLeftUp = (!noPiece(leftUp) && !isSameTeam(leftUp));
+        }
+
 
         if(startRow == 2){
             ChessPosition secondSquare = new ChessPosition(startRow+2,startCol);
@@ -261,10 +282,10 @@ class WhitePawn extends ChessMovement{
                 if(noPiece(firstSquare)){
                     moves.add(new ChessMove(position,firstSquare,promotionPiece));
                 }
-                if(!noPiece(rightUp) && !isSameTeam(rightUp)){
+                if(enemyRightUp){
                     moves.add(new ChessMove(position,rightUp,promotionPiece));
                 }
-                if(!noPiece(leftUp) && !isSameTeam(leftUp)){
+                if(enemyLeftUp){
                     moves.add(new ChessMove(position,leftUp,promotionPiece));
                 }
             }
@@ -274,10 +295,10 @@ class WhitePawn extends ChessMovement{
             if(noPiece(firstSquare)){
                 moves.add(new ChessMove(position,firstSquare));
             }
-            if(!noPiece(rightUp) && !isSameTeam(rightUp)){
+            if(enemyRightUp){
                 moves.add(new ChessMove(position,rightUp));
             }
-            if(!noPiece(leftUp) && !isSameTeam(leftUp)){
+            if(enemyLeftUp){
                 moves.add(new ChessMove(position,leftUp));
             }
         }
