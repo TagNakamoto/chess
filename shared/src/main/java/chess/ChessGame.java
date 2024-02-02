@@ -100,8 +100,30 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        myBoard.addPiece(move.getEndPosition(), myBoard.getPiece(move.getStartPosition()));
-        myBoard.removePiece(move.getStartPosition());
+        ChessPosition startPosition = move.getStartPosition();
+        ChessPosition endPosition = move.getEndPosition();
+        ChessPiece piece = myBoard.getPiece(startPosition);
+        ChessPiece.PieceType promoted = move.getPromotionPiece();
+        boolean validMove = validMoves(startPosition).contains(move);
+        if(validMove && (piece.getTeamColor()==turnColor)) {
+            if(promoted ==null) {
+                myBoard.addPiece(endPosition, myBoard.getPiece(startPosition));
+                myBoard.removePiece(move.getStartPosition());
+            }
+            else{
+                myBoard.addPiece(endPosition, new ChessPiece(myBoard.getPiece(startPosition).getTeamColor(), promoted));
+                myBoard.removePiece(move.getStartPosition());
+            }
+            if(turnColor==TeamColor.BLACK){
+                turnColor = TeamColor.WHITE;
+            }
+            else{
+                turnColor = TeamColor.BLACK;
+            }
+        }
+        else{
+            throw new InvalidMoveException("Move not valid");
+        }
     }
 
     /**
@@ -180,7 +202,7 @@ public class ChessGame {
                 }
             }
         }
-        throw new RuntimeException("King not found");
+        return null;
     }
 
     @Override
