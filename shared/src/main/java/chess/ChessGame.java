@@ -271,6 +271,12 @@ public class ChessGame {
                 if(tempPiece == null) {
                 }
                 else if(tempPiece.getPieceType() == ChessPiece.PieceType.KING && (tempPiece.getTeamColor()==teamColor)) {
+                    if(teamColor==TeamColor.BLACK && (tempPosition.getColumn()!=5 || tempPosition.getRow()==8)){
+                        blackKingUnmoved =false;
+                    }
+                    else if(teamColor==TeamColor.WHITE && (tempPosition.getColumn()!=5 || tempPosition.getRow()==1)){
+                        whiteKingUnmoved =false;
+                    }
                     return tempPosition;
                 }
             }
