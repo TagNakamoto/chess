@@ -61,7 +61,7 @@ public class ChessGame {
      *
      * @param startPosition the piece to get valid moves for
      * @return Set of valid moves for requested piece, or null if no piece at
-     * startPosition
+     * startPositionF
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ChessPiece piece = myBoard.getPiece(startPosition);
@@ -271,12 +271,6 @@ public class ChessGame {
                 if(tempPiece == null) {
                 }
                 else if(tempPiece.getPieceType() == ChessPiece.PieceType.KING && (tempPiece.getTeamColor()==teamColor)) {
-                    if(teamColor==TeamColor.BLACK && (tempPosition.getColumn()!=5 || tempPosition.getRow()==8)){
-                        blackKingUnmoved =false;
-                    }
-                    else if(teamColor==TeamColor.WHITE && (tempPosition.getColumn()!=5 || tempPosition.getRow()==1)){
-                        whiteKingUnmoved =false;
-                    }
                     return tempPosition;
                 }
             }
@@ -285,6 +279,17 @@ public class ChessGame {
     }
 
     private Collection<ChessMove> castleMoves(TeamColor teamColor){
+        if (turnColor == TeamColor.BLACK) {
+            ChessPosition blackKing = findKing(TeamColor.BLACK);
+            if (blackKing != null && (blackKing.getColumn() != 5 || blackKing.getRow() != 8)) {
+                blackKingUnmoved = false;
+            }
+        } else if (turnColor == TeamColor.WHITE) {
+            ChessPosition whiteKing = findKing(TeamColor.WHITE);
+            if (whiteKing != null && (whiteKing.getColumn() != 5 || whiteKing.getRow() != 1)) {
+                whiteKingUnmoved = false;
+            }
+        }
         ArrayList<ChessMove> castleMoves = new ArrayList<ChessMove>();
         if(teamColor == TeamColor.BLACK){
             if(blackKingUnmoved && !isInCheck(teamColor)){
