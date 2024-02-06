@@ -8,8 +8,8 @@ import java.util.Arrays;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
-public class ChessBoard implements Cloneable {
-    private ChessPiece[][] squares = new ChessPiece[8][8];
+public class ChessBoard {
+    private final ChessPiece[][] squares = new ChessPiece[8][8];
     public ChessBoard() {
         
     }
@@ -108,8 +108,21 @@ public class ChessBoard implements Cloneable {
 
     @Override
     public String toString() {
-        return "ChessBoard{" +
-                "squares=" + Arrays.deepToString(squares) +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        // Loop through the board and append each piece's toString representation
+        for (int row = 0; row < 8; row++) {
+            sb.append("|");
+            for (int col = 0; col < 8; col++) {
+                if (squares[row][col] != null) {
+                    sb.append(squares[row][col].toString());
+                } else {
+                    // If no piece is present, represent an empty square
+                    sb.append(" ");
+                }
+                sb.append("|"); // Add space between pieces for better visualization
+            }
+            sb.append("\n"); // Move to the next row
+        }
+        return sb.toString();
     }
 }

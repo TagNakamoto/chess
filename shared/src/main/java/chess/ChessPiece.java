@@ -53,10 +53,8 @@ public class ChessPiece implements Cloneable{
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) { //TOUGH ONE, need board
         ChessPiece piece = board.getPiece(myPosition);
-        //System.out.println(myPosition);
-        ChessGame.TeamColor pieceColor = piece.getTeamColor();
         //use switch statement to switch into relevant subclass, return what piecemoves in subclass returns
-        Collection<ChessMove> moves = new ArrayList<ChessMove>();
+        Collection<ChessMove> moves = new ArrayList<>();
         switch (piece.type) {
             case BISHOP:
 //                System.out.println("Bishop");
@@ -116,10 +114,15 @@ public class ChessPiece implements Cloneable{
 
     @Override
     public String toString() {
-        return "ChessPiece{" +
-                "pieceColor=" + pieceColor +
-                ", type=" + type + ", " +
-                '}';
+        return switch (type) {
+            case KING -> pieceColor == ChessGame.TeamColor.WHITE ? "K" : "k";
+            case QUEEN -> pieceColor == ChessGame.TeamColor.WHITE ? "Q" : "q";
+            case ROOK -> pieceColor == ChessGame.TeamColor.WHITE ? "R" : "r";
+            case BISHOP -> pieceColor == ChessGame.TeamColor.WHITE ? "B" : "b";
+            case KNIGHT -> pieceColor == ChessGame.TeamColor.WHITE ? "N" : "n";
+            case PAWN -> pieceColor == ChessGame.TeamColor.WHITE ? "P" : "p";
+        };
+
     }
     @Override
     public Object clone () throws CloneNotSupportedException {
