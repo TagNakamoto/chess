@@ -449,7 +449,7 @@ public class ChessGame {
     @Override
     public String toString() {
         return "ChessGame{" +
-                "myBoard=" + myBoard +
+                "myBoard=\n" + myBoard +
                 ", turnColor=" + turnColor +
                 '}';
     }
