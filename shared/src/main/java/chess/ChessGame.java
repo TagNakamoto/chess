@@ -223,25 +223,29 @@ public class ChessGame {
      */
     public boolean isInCheckmate(TeamColor teamColor) {
         if(isInCheck(teamColor)){
-            for (int i=1; i<9; i++) { //goes through all squares, if piece is of team, see valid moves, if not empty, return false. Otherwise return true
-                for (int j = 1; j < 9; j++) {
-                    ChessPosition tempPosition = new ChessPosition(i, j);
-                    ChessPiece tempPiece = myBoard.getPiece(tempPosition);
-                    if (tempPiece != null) {
-                        TeamColor pieceColor = tempPiece.getTeamColor();
-                        if (pieceColor == teamColor) {
-                            if (!validMoves(tempPosition).isEmpty()) {
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-            return true;
+            return hasNoMoves(teamColor);
         }
         else {
             return false;
         }
+    }
+
+    private boolean hasNoMoves(TeamColor teamColor) {
+        for (int i=1; i<9; i++) { //goes through all squares, if piece is of team, see valid moves, if not empty, return false, otherwise return true
+            for (int j = 1; j < 9; j++) {
+                ChessPosition tempPosition = new ChessPosition(i, j);
+                ChessPiece tempPiece = myBoard.getPiece(tempPosition);
+                if (tempPiece != null) {
+                    TeamColor pieceColor = tempPiece.getTeamColor();
+                    if (pieceColor == teamColor) {
+                        if (!validMoves(tempPosition).isEmpty()) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -256,22 +260,8 @@ public class ChessGame {
             return false;
         }
         else {
-            for (int i=1; i<9; i++) { //goes through all squares, if piece is of team, see valid moves, if not empty, return false. Otherwise return true
-                for (int j = 1; j < 9; j++) {
-                    ChessPosition tempPosition = new ChessPosition(i, j);
-                    ChessPiece tempPiece = myBoard.getPiece(tempPosition);
-                    if (tempPiece != null) {
-                        TeamColor pieceColor = tempPiece.getTeamColor();
-                        if (pieceColor == teamColor) {
-                            if (!validMoves(tempPosition).isEmpty()) {
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
+            return hasNoMoves(teamColor);
         }
-        return true;
     }
 
     /**
