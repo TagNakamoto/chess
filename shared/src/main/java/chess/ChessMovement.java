@@ -2,7 +2,7 @@ package chess;
 
 import java.util.*;
 
-//Make class of ChessMovement, create subclasses for each piece type, piecemoves method in this class
+//Make class of ChessMovement, create subclasses for each piece type, pieceMoves method in this class
 public class ChessMovement {
     public ChessMovement(ChessBoard board, ChessPosition position) {
         this.board = board;

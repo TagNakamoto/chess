@@ -53,7 +53,7 @@ public class ChessPiece implements Cloneable{
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) { //TOUGH ONE, need board
         ChessPiece piece = board.getPiece(myPosition);
-        //use switch statement to switch into relevant subclass, return what piecemoves in subclass returns
+        //use switch statement to switch into relevant subclass, return what pieceMoves in subclass returns
         Collection<ChessMove> moves = new ArrayList<>();
         switch (piece.type) {
             case BISHOP:

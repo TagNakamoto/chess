@@ -1,6 +1,9 @@
 package chess;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Objects;
+import java.util.Map;
 
 /**
  * Represents a single square position on a chess board
@@ -10,6 +13,14 @@ import java.util.Objects;
  */
 public class ChessPosition {
 
+    private static final Map<Integer,Character> colLetter;
+    static {
+        colLetter = new HashMap<>();
+        for (int i=1; i<9; i++){
+            char letter = (char) ('a' + i-1);
+            colLetter.put(i,letter);
+        }
+    }
     private final int row;
     private final int col;
 
@@ -50,8 +61,8 @@ public class ChessPosition {
     @Override
     public String toString() {
         return "ChessPosition{" +
-                "row=" + row +
-                ", col=" + col +
+                colLetter.get(col) +
+                row +
                 '}';
     }
 }
