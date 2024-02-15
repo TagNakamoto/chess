@@ -10,8 +10,9 @@ import java.util.Arrays;
  */
 public class ChessBoard {
     private final ChessPiece[][] squares = new ChessPiece[8][8];
+
     public ChessBoard() {
-        
+
     }
 
     /**
@@ -21,7 +22,7 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        squares[position.getRow()-1][position.getColumn()-1] = piece;
+        squares[position.getRow() - 1][position.getColumn() - 1] = piece;
     }
 
     /**
@@ -32,15 +33,16 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        return squares[position.getRow()-1][position.getColumn()-1];
+        return squares[position.getRow() - 1][position.getColumn() - 1];
     }
 
     /**
      * Removes piece from square (sets square to null)
      */
     public void removePiece(ChessPosition position) {
-        squares[position.getRow()-1][position.getColumn()-1] = null;
+        squares[position.getRow() - 1][position.getColumn() - 1] = null;
     }
+
     /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
@@ -66,8 +68,8 @@ public class ChessBoard {
         squares[1][6] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
         squares[1][7] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
 
-        for(int i=2; i<6; i++){
-            for(int j=0; j<8; j++) {
+        for (int i = 2; i < 6; i++) {
+            for (int j = 0; j < 8; j++) {
                 squares[i][j] = null;
             }
         }
@@ -95,8 +97,12 @@ public class ChessBoard {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ChessBoard that = (ChessBoard) o;
         return Arrays.deepEquals(squares, that.squares);
     }

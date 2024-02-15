@@ -10,9 +10,10 @@ import java.util.Objects;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
-public class ChessPiece implements Cloneable{
+public class ChessPiece implements Cloneable {
     private final ChessGame.TeamColor pieceColor;
     private final ChessPiece.PieceType type;
+
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.pieceColor = pieceColor;
         this.type = type;
@@ -83,11 +84,10 @@ public class ChessPiece implements Cloneable{
                 break;
             case PAWN:
 //                System.out.println("King");
-                if(piece.pieceColor == ChessGame.TeamColor.BLACK){
+                if (piece.pieceColor == ChessGame.TeamColor.BLACK) {
                     BlackPawn BlackPawn = new BlackPawn(board, myPosition);
                     moves = BlackPawn.pieceMoves();
-                }
-                else if(piece.pieceColor == ChessGame.TeamColor.WHITE){
+                } else if (piece.pieceColor == ChessGame.TeamColor.WHITE) {
                     WhitePawn WhitePawn = new WhitePawn(board, myPosition);
                     moves = WhitePawn.pieceMoves();
                 }
@@ -95,14 +95,17 @@ public class ChessPiece implements Cloneable{
         }
 
 
-
         return moves;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ChessPiece that = (ChessPiece) o;
         return pieceColor == that.pieceColor && type == that.type;
     }
@@ -124,8 +127,9 @@ public class ChessPiece implements Cloneable{
         };
 
     }
+
     @Override
-    public Object clone () throws CloneNotSupportedException {
+    public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
 }
