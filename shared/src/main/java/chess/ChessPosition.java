@@ -1,6 +1,5 @@
 package chess;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Map;
@@ -13,14 +12,16 @@ import java.util.Map;
  */
 public class ChessPosition {
 
-    private static final Map<Integer,Character> colLetter;
+    private static final Map<Integer, Character> colLetter;
+
     static {
         colLetter = new HashMap<>();
-        for (int i=1; i<9; i++){
-            char letter = (char) ('a' + i-1);
-            colLetter.put(i,letter);
+        for (int i = 1; i < 9; i++) {
+            char letter = (char) ('a' + i - 1);
+            colLetter.put(i, letter);
         }
     }
+
     private final int row;
     private final int col;
 
@@ -42,13 +43,17 @@ public class ChessPosition {
      * 1 codes for the left row
      */
     public int getColumn() {
-       return col;
+        return col;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ChessPosition that = (ChessPosition) o;
         return row == that.row && col == that.col;
     }
