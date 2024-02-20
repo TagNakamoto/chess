@@ -2,11 +2,9 @@ package server;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import model.RegisterInfo;
 import spark.Request;
 import spark.Response;
-
-
-import java.util.Map;
 
 public class Handler {
     private Gson gson;
@@ -14,7 +12,7 @@ public class Handler {
         gson = new Gson();
     }
     public String registerHandler (Request req, Response res){
-        RegisterInfo regisObj = decodeJSON(req, RegisterInfo.class);
+        UserData regisObj = decodeJSON(req, UserData.class);
         String username = regisObj.username();
         String password = regisObj.password();
         String email = regisObj.email();
