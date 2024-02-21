@@ -4,7 +4,6 @@ import spark.*;
 
 public class Server {
     private static final int MAX_WAITING_CONNECTIONS = 12;
-    private DataBase db = new DataBase();
     public int run(int desiredPort) {
         Spark.port(desiredPort);
 
