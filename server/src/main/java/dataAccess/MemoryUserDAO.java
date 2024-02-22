@@ -9,8 +9,13 @@ import java.util.Map;
 public class MemoryUserDAO implements UserDAO{
     private static Map<String, UserData> users = new HashMap<>();
     @Override
-    public void insertUser(UserData u){
-        users.put(u.username(), u);
+    public void insertUser(UserData u) throws DataAccessException{
+        if(u.username()==null || u.password()==null || u.email()==null){
+            throw new DataAccessException("Error: bad request");
+        }
+        else {
+            users.put(u.username(), u);
+        }
     }
     @Override
     public UserData getUser(String username) {
