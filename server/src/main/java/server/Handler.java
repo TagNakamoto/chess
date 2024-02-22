@@ -25,15 +25,34 @@ public class Handler {
             return body;
         }
         catch (DataAccessException ex){
-            res.status(500);
-            return ex.getMessage();
+            String errorString = ex.getMessage();
+            Message messageObject = new Message(errorString);
+            if(errorString.equals("Error: bad request")){
+                res.status(400);
+            }
+            else if(errorString.equals("Error: already taken")){
+                res.status(403);
+            }
+            else {
+                res.status(500);
+            }
+
+            return encodeJSON(messageObject);
         }
 
     }
     public String clearHandler (Request req, Response res){
-        userServer.clear();
-        res.status(200);
-        return "";
+        try {
+            userServer.clear();
+            res.status(200);
+            return "";
+        }
+        catch (DataAccessException ex){
+            res.status(500);
+            return encodeJSON(ex);
+        }
+
+
     }
     private <T> T decodeJSON (Request req, Class<T> clazz) {
         try {

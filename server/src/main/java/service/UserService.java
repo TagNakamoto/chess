@@ -18,10 +18,12 @@ public class UserService {
             auths.insertAuth(tempAuth);
             return tempAuth;
         }
+        else{
+            throw new DataAccessException("Error: already taken");
+        }
 
-        return null;
     }
-    public void clear(){
+    public void clear() throws DataAccessException{
         users.clear();
         auths.clear();
     }
