@@ -7,4 +7,6 @@ public interface UserDAO {
     UserData getUser(String username);
     void clear() throws DataAccessException;
 
+    boolean isEmpty();
+
 }
