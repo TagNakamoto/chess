@@ -45,6 +45,15 @@ public class UserService {
         }
 
     }
+    public void logout(String authToken) throws DataAccessException{
+        AuthData authData = auths.getAuthFromToken(authToken);
+        if(authData != null){
+            auths.deleteAuth(authData);
+        }
+        else{
+            throw new DataAccessException("Error: unauthorized");
+        }
+    }
     private AuthData createAuth(String username){
         return new AuthData(UUID.randomUUID().toString(), username);
     }
