@@ -18,7 +18,7 @@ public class Handler {
         gson = new Gson();
     }
     public String registerHandler (Request req, Response res){
-        UserData regisObj = decodeJSON(req, UserData.class);
+        UserData regisObj = decodeBodyJSON(req, UserData.class);
         try{
             String body = encodeJSON(userServer.register(regisObj));
             res.status(200);
@@ -55,7 +55,7 @@ public class Handler {
 
     }
     public String loginHandler (Request req, Response res){
-        UserData loginObj = decodeJSON(req, UserData.class);
+        UserData loginObj = decodeBodyJSON(req, UserData.class);
         try{
             String body = encodeJSON(userServer.login(loginObj));
             res.status(200);
@@ -74,7 +74,28 @@ public class Handler {
             return encodeJSON(messageObject);
         }
     }
-    private <T> T decodeJSON (Request req, Class<T> clazz) {
+
+    public String logoutHandler(Request req, Response res){
+        String authToken = req.headers("authorization");
+        try{
+            userServer.logout(authToken);
+            res.status(200);
+            return "";
+        }
+        catch (DataAccessException ex){
+            String errorString = ex.getMessage();
+            Message messageObject = new Message(errorString);
+            if(errorString.equals("Error: unauthorized")){
+                res.status(401);
+            }
+            else {
+                res.status(500);
+            }
+
+            return encodeJSON(messageObject);
+        }
+    }
+    private <T> T decodeBodyJSON(Request req, Class<T> clazz) {
         try {
             String body = req.body();
             return gson.fromJson(body,clazz);
