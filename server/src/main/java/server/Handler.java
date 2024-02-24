@@ -54,6 +54,26 @@ public class Handler {
 
 
     }
+    public String loginHandler (Request req, Response res){
+        UserData loginObj = decodeJSON(req, UserData.class);
+        try{
+            String body = encodeJSON(userServer.login(loginObj));
+            res.status(200);
+            return body;
+        }
+        catch (DataAccessException ex){
+            String errorString = ex.getMessage();
+            Message messageObject = new Message(errorString);
+            if(errorString.equals("Error: unauthorized")){
+                res.status(401);
+            }
+            else {
+                res.status(500);
+            }
+
+            return encodeJSON(messageObject);
+        }
+    }
     private <T> T decodeJSON (Request req, Class<T> clazz) {
         try {
             String body = req.body();

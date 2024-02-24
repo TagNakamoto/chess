@@ -7,7 +7,7 @@ import java.util.Map;
 
 
 public class MemoryUserDAO implements UserDAO{
-    private static Map<String, UserData> users = new HashMap<>();
+    private static final Map<String, UserData> users = new HashMap<>();
     @Override
     public void insertUser(UserData u) throws DataAccessException{
         if(u.username()==null || u.password()==null || u.email()==null){
@@ -24,6 +24,10 @@ public class MemoryUserDAO implements UserDAO{
     @Override
     public void clear() throws DataAccessException{
         users.clear();
+    }
+    @Override
+    public boolean isEmpty(){
+        return users.isEmpty();
     }
 
 }

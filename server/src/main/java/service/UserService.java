@@ -27,6 +27,24 @@ public class UserService {
         users.clear();
         auths.clear();
     }
+    public AuthData login(UserData user) throws DataAccessException{
+        String username = user.username();
+        UserData correctInfo = users.getUser(username);
+
+        if(user.email()!=null){
+            throw new DataAccessException("Error: email not required for this operation");
+        }
+
+        if(correctInfo == null || !user.password().equals(correctInfo.password())){
+            throw new DataAccessException("Error: unauthorized");
+        }
+        else {
+            AuthData tempAuth = createAuth(username);
+            auths.insertAuth(tempAuth);
+            return tempAuth;
+        }
+
+    }
     private AuthData createAuth(String username){
         return new AuthData(UUID.randomUUID().toString(), username);
     }
