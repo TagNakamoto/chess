@@ -42,15 +42,15 @@ public class MemoryGameDAO implements GameDAO{
         }
         else{
             GameData updateGame = games.get(gameID);
-            if(playerColor.equals("White") && updateGame.whiteUsername() == null){
+            if(playerColor.equals("WHITE") && updateGame.whiteUsername() == null){
                 games.put(gameID, new GameData(gameID, playerName, updateGame.blackUsername(),
                         updateGame.gameName(), updateGame.game()));
             }
-            else if(playerColor.equals("Black") && updateGame.blackUsername() == null){
+            else if(playerColor.equals("BLACK") && updateGame.blackUsername() == null){
                 games.put(gameID, new GameData(gameID, updateGame.whiteUsername(), playerName,
                         updateGame.gameName(), updateGame.game()));
             }
-            else if(playerColor.equals("White") || playerColor.equals("Black")){
+            else if(playerColor.equals("WHITE") || playerColor.equals("BLACK")){
                 throw new DataAccessException("Error: already taken");
             }
             else{
@@ -60,12 +60,14 @@ public class MemoryGameDAO implements GameDAO{
     }
 
     @Override
-    public ArrayList<GameData> listGames(){
-        ArrayList<GameData> gamesList = new ArrayList<>();
+    public HashSet<GameData> listGames(){
+        HashSet<GameData> gamesList = new HashSet<>();
         Set<Integer> gameIDs = games.keySet();
         for(Integer gameID : gameIDs){
             gamesList.add(games.get(gameID));
         }
         return gamesList;
     }
+
+
 }

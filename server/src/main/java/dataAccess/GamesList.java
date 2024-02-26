@@ -2,7 +2,7 @@ package dataAccess;
 
 import model.GameData;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
-public record GamesList(ArrayList<GameData> games) {
+public record GamesList(HashSet<GameData> games) {
 }

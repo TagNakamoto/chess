@@ -59,4 +59,9 @@ public class UserService {
     private AuthData createAuth(String username){
         return new AuthData(UUID.randomUUID().toString(), username);
     }
+
+    @Override
+    public String toString() {
+        return "UserService{}";
+    }
 }
