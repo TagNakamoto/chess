@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.UserService;
 
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.*;
 public class ServiceTests {
 
@@ -61,5 +63,26 @@ public class ServiceTests {
         catch(DataAccessException ex){
             fail("Unexpected exception:" + ex.getMessage());
         }
+    }
+
+    @Test
+    public void normalLogin(){
+        UserService service = new UserService();
+        normalRegisterTest();
+        try {
+            AuthData loginObject = service.login(new UserData("taho", "password123", null));
+            assertEquals("taho", loginObject.username());
+            assertNotNull(loginObject.authToken());
+        }
+        catch(DataAccessException ex){
+            fail("Unexpected exception:" + ex.getMessage());
+        }
+
+    }
+
+    @Test void wrongPasswordLogin(){
+        UserService service = new UserService();
+        UserData wrongPass = new UserData("taho", "password", null);
+        assertThrows(DataAccessException.class, ()-> service.login(wrongPass));
     }
 }
