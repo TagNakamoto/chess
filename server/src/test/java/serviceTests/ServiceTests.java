@@ -22,7 +22,7 @@ public class ServiceTests {
         }
     }
     @Test
-    public void normalRegister(){
+    public void normalRegisterTest(){
         UserService service = new UserService();
         UserData normalUser = new UserData("taho", "password123", "email@u.com");
         try {
@@ -39,14 +39,14 @@ public class ServiceTests {
     }
 
     @Test
-    public void noUserData(){
+    public void noUserDataRegisterTest(){
         UserService service = new UserService();
         UserData emptyUser = new UserData(null, null, null);
         assertThrows(DataAccessException.class, ()-> service.register(emptyUser));
     }
 
     @Test
-    public void clearData(){
+    public void clearDataTest(){
         MemoryUserDAO users = new MemoryUserDAO();
         MemoryAuthDAO auths = new MemoryAuthDAO();
         UserService service = new UserService();
