@@ -80,9 +80,36 @@ public class ServiceTests {
 
     }
 
-    @Test void wrongPasswordLogin(){
+    @Test
+    void wrongPasswordLogin(){
         UserService service = new UserService();
         UserData wrongPass = new UserData("taho", "password", null);
         assertThrows(DataAccessException.class, ()-> service.login(wrongPass));
+    }
+
+    @Test
+    void normalLogout(){
+        UserService service = new UserService();
+        normalRegisterTest();
+        try {
+            AuthData loginObject = service.login(new UserData("taho", "password123", null));
+            service.logout(loginObject.authToken());
+        }
+        catch(DataAccessException ex){
+            fail("Unexpected exception:" + ex.getMessage());
+        }
+    }
+
+    @Test
+    void wrongAuthTokenLogout(){
+        UserService service = new UserService();
+        normalRegisterTest();
+        try {
+            service.login(new UserData("taho", "password123", null));
+            assertThrows(DataAccessException.class, ()-> service.logout("Definitely not an authtoken"));
+        }
+        catch(DataAccessException ex){
+            fail("Unexpected exception:" + ex.getMessage());
+        }
     }
 }
