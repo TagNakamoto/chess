@@ -12,7 +12,7 @@ public class MemoryAuthDAO implements AuthDAO{
             throw new DataAccessException("bad request");
         }
         else {
-            authTokens.put(auth.username(), auth.authToken());
+            authTokens.put(auth.authToken(), auth.username());
         }
     }
     @Override
@@ -25,21 +25,23 @@ public class MemoryAuthDAO implements AuthDAO{
     }
     @Override
     public void deleteAuth(AuthData authData){
-        authTokens.remove(authData.username(), authData.authToken());
+        authTokens.remove(authData.authToken(), authData.username());
     }
     @Override
-    public AuthData getAuthFromToken(String authToken){
-        String username = "";
+    public AuthData getAuthFromToken(String authToken) throws DataAccessException{
+        String username = authTokens.get(authToken);
 
-        for (Map.Entry<String, String> entry : authTokens.entrySet()) {
-            if (authToken.equals(entry.getValue())) {
-                username = entry.getKey();
-            }
+        if(username !=null) {
+            return new AuthData(authToken, authTokens.get(authToken));
         }
-
-        if(!Objects.equals(username, "")) {
-            return new AuthData(authToken, username);
+        else{
+            throw new DataAccessException("Error: unauthorized");
         }
-        return null;
     }
+
+    @Override
+    public String toString() {
+        return "MemoryAuthDAO{}";
+    }
+
 }

@@ -4,21 +4,19 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import dataAccess.*;
-import model.AuthData;
 import model.GameData;
 import model.UserData;
 import service.GameService;
 import service.UserService;
 import spark.Request;
 import spark.Response;
-
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Objects;
 
 public class Handler {
-    private Gson gson;
-    private static UserService userService = new UserService();
-    private static GameService gameService = new GameService();
+    private final Gson gson;
+    private static final UserService userService = new UserService();
+    private static final GameService gameService = new GameService();
     public Handler() {
         gson = new GsonBuilder().serializeNulls().create();
     }
@@ -163,7 +161,7 @@ public class Handler {
 
     public String listGamesHandler(Request req, Response res){
         String authToken = req.headers("authorization");
-        ArrayList<GameData> gamesList = new ArrayList<>();
+        HashSet<GameData> gamesList;
         try{
             gamesList = gameService.listGames(authToken);
             return encodeJSON(new GamesList(gamesList));
@@ -194,7 +192,28 @@ public class Handler {
     private String encodeJSON (Object object){
         return gson.toJson(object);
     }
-    private AuthData createAuth(String username){
-        return new AuthData(UUID.randomUUID().toString(), username);
+
+    @Override
+    public String toString() {
+        return "Handler{" +
+                "gson=" + gson +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Handler handler = (Handler) o;
+        return Objects.equals(gson, handler.gson);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(gson);
     }
 }

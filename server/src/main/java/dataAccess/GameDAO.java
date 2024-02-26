@@ -2,13 +2,13 @@ package dataAccess;
 
 import model.GameData;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public interface GameDAO {
     int insertGame(String gameName);
     void clear();
     void addObserver(int gameID, String username) throws DataAccessException;
     void addPlayer(String playerColor, int gameID, String playerName) throws DataAccessException;
-    ArrayList<GameData> listGames();
+    HashSet<GameData> listGames();
     
 }
