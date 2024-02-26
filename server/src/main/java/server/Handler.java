@@ -12,6 +12,7 @@ import service.UserService;
 import spark.Request;
 import spark.Response;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Handler {
@@ -159,6 +160,28 @@ public class Handler {
             }
         }
     }
+
+    public String listGamesHandler(Request req, Response res){
+        String authToken = req.headers("authorization");
+        ArrayList<GameData> gamesList = new ArrayList<>();
+        try{
+            gamesList = gameService.listGames(authToken);
+            return encodeJSON(new GamesList(gamesList));
+        }
+        catch (DataAccessException ex){
+            String errorString = ex.getMessage();
+            Message messageObject = new Message(errorString);
+            if(errorString.equals("Error: unauthorized")){
+                res.status(401);
+            }
+            else {
+                res.status(500);
+            }
+
+            return encodeJSON(messageObject);
+        }
+    }
+
     private <T> T decodeBodyJSON(Request req, Class<T> clazz) {
         try {
             String body = req.body();

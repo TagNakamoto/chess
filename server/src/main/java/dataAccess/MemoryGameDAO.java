@@ -58,4 +58,14 @@ public class MemoryGameDAO implements GameDAO{
             }
         }
     }
+
+    @Override
+    public ArrayList<GameData> listGames(){
+        ArrayList<GameData> gamesList = new ArrayList<>();
+        Set<Integer> gameIDs = games.keySet();
+        for(Integer gameID : gameIDs){
+            gamesList.add(games.get(gameID));
+        }
+        return gamesList;
+    }
 }
