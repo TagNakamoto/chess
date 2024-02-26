@@ -2,6 +2,9 @@ package service;
 
 import dataAccess.*;
 import model.AuthData;
+import model.GameData;
+
+import java.util.ArrayList;
 
 public class GameService {
     private static final UserDAO users = new MemoryUserDAO();
@@ -23,13 +26,24 @@ public class GameService {
             throw new DataAccessException("Error: unauthorized");
         }
         else{
-            if(playerColor.isEmpty()){
+            if(playerColor==null){
                 games.addObserver(gameID, user.username());
             }
-            else{
+            else if (!playerColor.isEmpty()) {
                 games.addPlayer(playerColor, gameID, user.username());
+            }
+            else {
+                games.addObserver(gameID, user.username());
             }
         }
     }
-
+    public ArrayList<GameData> listGames(String authToken) throws DataAccessException{
+        AuthData user = auths.getAuthFromToken(authToken);
+        if(user == null){
+            throw new DataAccessException("Error: unauthorized");
+        }
+        else{
+            return games.listGames();
+        }
+    }
 }
