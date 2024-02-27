@@ -137,4 +137,38 @@ public class ServiceTests {
         assertThrows(DataAccessException.class, ()
                 -> gameService.createGame("Test Game", "Not an authToken"));
     }
+
+    @Test
+    void normalJoinGame() {
+        UserService userService = new UserService();
+        GameService gameService = new GameService();
+        normalCreateGame();
+
+        try {
+            AuthData user = userService.login(new UserData("taho", "password123", null));
+            int gameNumber = gameService.createGame("Test Game", user.authToken());
+            gameService.joinGame("WHITE", gameNumber, user.authToken());
+        }
+        catch(DataAccessException ex){
+            fail("Unexpected exception:" + ex.getMessage());
+        }
+
+    }
+
+    @Test
+    void wrongNumberJoinGame() {
+        UserService userService = new UserService();
+        GameService gameService = new GameService();
+        normalCreateGame();
+
+        try {
+            AuthData user = userService.login(new UserData("taho", "password123", null));
+            gameService.createGame("Test Game", user.authToken());
+            assertThrows(DataAccessException.class, ()
+                    ->gameService.joinGame("WHITE", 5, user.authToken()));
+        }
+        catch(DataAccessException ex){
+            fail("Unexpected exception:" + ex.getMessage());
+        }
+    }
 }
