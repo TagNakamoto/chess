@@ -3,12 +3,14 @@ import dataAccess.DataAccessException;
 import dataAccess.MemoryAuthDAO;
 import dataAccess.MemoryUserDAO;
 import model.AuthData;
+import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.GameService;
 import service.UserService;
 
+import java.util.HashSet;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -166,6 +168,46 @@ public class ServiceTests {
             gameService.createGame("Test Game", user.authToken());
             assertThrows(DataAccessException.class, ()
                     ->gameService.joinGame("WHITE", 5, user.authToken()));
+        }
+        catch(DataAccessException ex){
+            fail("Unexpected exception:" + ex.getMessage());
+        }
+    }
+
+    @Test
+    void normalListGames() {
+        UserService userService = new UserService();
+        GameService gameService = new GameService();
+        normalRegisterTest();
+        try {
+            AuthData user = userService.login(new UserData("taho", "password123", null));
+            gameService.createGame("Test Game 1", user.authToken());
+            gameService.createGame("Test Game 2", user.authToken());
+            gameService.createGame("Test Game 3", user.authToken());
+
+            HashSet<GameData> games = gameService.listGames(user.authToken());
+            assertEquals(games.size(), 3);
+        }
+        catch(DataAccessException ex){
+            fail("Unexpected exception:" + ex.getMessage());
+        }
+
+    }
+
+    @Test
+    void notAuthListGames() {
+        UserService userService = new UserService();
+        GameService gameService = new GameService();
+        normalRegisterTest();
+        try {
+            AuthData user = userService.login(new UserData("taho", "password123", null));
+            gameService.createGame("Test Game 1", user.authToken());
+            gameService.createGame("Test Game 2", user.authToken());
+            gameService.createGame("Test Game 3", user.authToken());
+
+            userService.logout(user.authToken());
+
+            assertThrows(DataAccessException.class, () ->gameService.listGames(user.authToken()));
         }
         catch(DataAccessException ex){
             fail("Unexpected exception:" + ex.getMessage());
