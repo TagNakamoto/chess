@@ -65,16 +65,7 @@ public class Handler {
             return body;
         }
         catch (DataAccessException ex){
-            String errorString = ex.getMessage();
-            Message messageObject = new Message(errorString);
-            if(errorString.equals("Error: unauthorized")){
-                res.status(401);
-            }
-            else {
-                res.status(500);
-            }
-
-            return encodeJSON(messageObject);
+            return encodeJSON(errorCatcher(ex,res));
         }
     }
 
@@ -85,17 +76,8 @@ public class Handler {
             res.status(200);
             return "";
         }
-        catch (DataAccessException ex){
-            String errorString = ex.getMessage();
-            Message messageObject = new Message(errorString);
-            if(errorString.equals("Error: unauthorized")){
-                res.status(401);
-            }
-            else {
-                res.status(500);
-            }
-
-            return encodeJSON(messageObject);
+        catch (DataAccessException ex) {
+            return encodeJSON(errorCatcher(ex,res));
         }
     }
 
@@ -167,16 +149,7 @@ public class Handler {
             return encodeJSON(new GamesList(gamesList));
         }
         catch (DataAccessException ex){
-            String errorString = ex.getMessage();
-            Message messageObject = new Message(errorString);
-            if(errorString.equals("Error: unauthorized")){
-                res.status(401);
-            }
-            else {
-                res.status(500);
-            }
-
-            return encodeJSON(messageObject);
+            return encodeJSON(errorCatcher(ex,res));
         }
     }
 
@@ -193,6 +166,17 @@ public class Handler {
         return gson.toJson(object);
     }
 
+    private Message errorCatcher(DataAccessException ex, Response res){
+        String errorString = ex.getMessage();
+        Message messageObject = new Message(errorString);
+        if(errorString.equals("Error: unauthorized")){
+            res.status(401);
+        }
+        else {
+            res.status(500);
+        }
+        return messageObject;
+    }
     @Override
     public String toString() {
         return "Handler{" +

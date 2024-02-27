@@ -59,37 +59,37 @@ public class ChessPiece implements Cloneable {
         switch (piece.type) {
             case BISHOP:
 //                System.out.println("Bishop");
-                Bishop Bishop = new Bishop(board, myPosition);
-                moves = Bishop.pieceMoves();
+                Bishop bishop = new Bishop(board, myPosition);
+                moves = bishop.pieceMoves();
                 break;
             case ROOK:
 //                System.out.println("Rook");
-                Rook Rook = new Rook(board, myPosition);
-                moves = Rook.pieceMoves();
+                Rook rook = new Rook(board, myPosition);
+                moves = rook.pieceMoves();
                 break;
             case QUEEN:
 //                System.out.println("Queen");
-                Queen Queen = new Queen(board, myPosition);
-                moves = Queen.pieceMoves();
+                Queen queen = new Queen(board, myPosition);
+                moves = queen.pieceMoves();
                 break;
             case KNIGHT:
 //                System.out.println("Knight");
-                Knight Knight = new Knight(board, myPosition);
-                moves = Knight.pieceMoves();
+                Knight knight = new Knight(board, myPosition);
+                moves = knight.pieceMoves();
                 break;
             case KING:
 //                System.out.println("King");
-                King King = new King(board, myPosition);
-                moves = King.pieceMoves();
+                King king = new King(board, myPosition);
+                moves = king.pieceMoves();
                 break;
             case PAWN:
 //                System.out.println("King");
                 if (piece.pieceColor == ChessGame.TeamColor.BLACK) {
-                    BlackPawn BlackPawn = new BlackPawn(board, myPosition);
-                    moves = BlackPawn.pieceMoves();
+                    BlackPawn blackPawn = new BlackPawn(board, myPosition);
+                    moves = blackPawn.pieceMoves();
                 } else if (piece.pieceColor == ChessGame.TeamColor.WHITE) {
-                    WhitePawn WhitePawn = new WhitePawn(board, myPosition);
-                    moves = WhitePawn.pieceMoves();
+                    WhitePawn whitePawn = new WhitePawn(board, myPosition);
+                    moves = whitePawn.pieceMoves();
                 }
                 break;
         }
