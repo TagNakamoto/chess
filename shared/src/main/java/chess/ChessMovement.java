@@ -155,7 +155,7 @@ class Knight extends ChessMovement {
 
     public Collection<ChessMove> pieceMoves() {
         ArrayList<ChessMove> moves = new ArrayList<>();
-        int[][] LShape = {
+        int[][] arrayLShape = {
                 {2, 1},
                 {2, -1},
                 {1, 2},
@@ -165,7 +165,7 @@ class Knight extends ChessMovement {
                 {-1, -2},
                 {1, -2}
         };
-        generateArrayMoves(LShape, moves);
+        generateArrayMoves(arrayLShape, moves);
         return moves;
     }
 }
@@ -177,7 +177,7 @@ class King extends ChessMovement {
 
     public Collection<ChessMove> pieceMoves() {
         ArrayList<ChessMove> moves = new ArrayList<>();
-        int[][] KingBox = {
+        int[][] arrayKingBox = {
                 {1, 0}, //up
                 {1, 1}, //upRight
                 {0, 1}, //Right
@@ -187,7 +187,7 @@ class King extends ChessMovement {
                 {0, -1}, //Left
                 {1, -1} //LeftUp
         };
-        generateArrayMoves(KingBox, moves);
+        generateArrayMoves(arrayKingBox, moves);
 
         return moves;
     }
