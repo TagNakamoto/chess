@@ -6,6 +6,7 @@ import model.AuthData;
 import model.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import service.GameService;
 import service.UserService;
 
 import java.util.Objects;
@@ -106,10 +107,34 @@ public class ServiceTests {
         normalRegisterTest();
         try {
             service.login(new UserData("taho", "password123", null));
-            assertThrows(DataAccessException.class, ()-> service.logout("Definitely not an authtoken"));
+            assertThrows(DataAccessException.class, ()-> service.logout("Definitely not an authToken"));
         }
         catch(DataAccessException ex){
             fail("Unexpected exception:" + ex.getMessage());
         }
+    }
+
+    @Test
+    void normalCreateGame () {
+        UserService userService = new UserService();
+        GameService gameService = new GameService();
+        normalRegisterTest();
+        try {
+            AuthData user = userService.login(new UserData("taho", "password123", null));
+            int gameNumber = gameService.createGame("Test Game", user.authToken());
+            assertEquals(gameNumber, 1);
+        }
+        catch(DataAccessException ex){
+            fail("Unexpected exception:" + ex.getMessage());
+        }
+    }
+
+    @Test
+    void notAuthCreateGame(){
+        GameService gameService = new GameService();
+        normalRegisterTest();
+
+        assertThrows(DataAccessException.class, ()
+                -> gameService.createGame("Test Game", "Not an authToken"));
     }
 }
