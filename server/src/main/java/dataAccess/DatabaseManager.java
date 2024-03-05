@@ -41,6 +41,10 @@ public class DatabaseManager {
             try (var preparedStatement = conn.prepareStatement(statement)) {
                 preparedStatement.executeUpdate();
             }
+            createUsersTable();
+            createAuthsTable();
+            createGamesTable();
+            createObserversTable();
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -68,15 +72,78 @@ public class DatabaseManager {
         }
     }
 
-//    static void updateSQL(PreparedStatement sqlString) throws DataAccessException {
-//        try{
-//            var conn = DriverManager.getConnection(connectionUrl, user, password);
-//            try(var preparedStatement = conn.prepareStatement(sqlString)){
-//                preparedStatement.executeUpdate();
-//            }
-//        }
-//        catch (SQLException ex){
-//            throw new DataAccessException(ex.getMessage());
-//        }
-//    }
+    static void createUsersTable() throws DataAccessException {
+        try (Connection conn = getConnection()) {
+            var statement = "CREATE TABLE IF NOT EXISTS users" +
+                    "(" +
+                    "username varchar(60) not null primary key," +
+                    "password varchar(60) not null," +
+                    "email varchar(60) not null" +
+                    ");";
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.executeUpdate();
+            }
+        }
+        catch (SQLException ex){
+            throw new DataAccessException(ex.getMessage());
+        }
+    }
+    static void createGamesTable() throws DataAccessException {
+        try (Connection conn = getConnection()) {
+            var statement = "CREATE TABLE IF NOT EXISTS games" +
+                    "(" +
+                    "gameID integer not null primary key auto increment," +
+                    "whiteUsername varchar(60)," +
+                    "blackUsername varchar(60)," +
+                    "gameName varchar(60) not null," +
+                    "game varchar(255) not null ," +
+                    "foreign key(whiteUsername) references users(username)," +
+                    "foreign key(blackUsername) references users(username)" +
+                    ");";
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.executeUpdate();
+            }
+        }
+        catch (SQLException ex){
+            throw new DataAccessException(ex.getMessage());
+        }
+    }
+
+    static void createAuthsTable() throws DataAccessException {
+        try (Connection conn = getConnection()) {
+            var statement = "CREATE TABLE IF NOT EXISTS auths" +
+                    "(" +
+                    "authToken varchar(60) not null primary key," +
+                    "username varchar(60) not null," +
+                    "foreign key(username) references users(username)" +
+                    ");";
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.executeUpdate();
+            }
+        }
+        catch (SQLException ex){
+            throw new DataAccessException(ex.getMessage());
+        }
+    }
+
+    static void createObserversTable() throws DataAccessException {
+        try (Connection conn = getConnection()) {
+        var statement = "CREATE TABLE IF NOT EXISTS observers" +
+                "(" +
+                "id integer not null primary key auto increment," +
+                "gameID integer not null," +
+                "username varchar(60) not null," +
+                "foreign key(gameID) references games(gameID)," +
+                "foreign key(username) references users(username)" +
+                ");";
+        try (var preparedStatement = conn.prepareStatement(statement)) {
+            preparedStatement.executeUpdate();
+        }
+    }
+        catch (SQLException ex){
+        throw new DataAccessException(ex.getMessage());
+    }
+}
+
+
 }
