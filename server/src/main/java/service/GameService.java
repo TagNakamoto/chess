@@ -7,6 +7,13 @@ import model.GameData;
 import java.util.HashSet;
 
 public class GameService {
+    static {
+        try {
+            DatabaseManager.createDatabase();
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
     private static final AuthDAO auths = new MemoryAuthDAO();
     private static final GameDAO games = new MemoryGameDAO();
     public GameService(){}

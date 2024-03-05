@@ -7,6 +7,13 @@ import model.UserData;
 import java.util.UUID;
 
 public class UserService {
+    static {
+        try {
+            DatabaseManager.createDatabase();
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
     private static final UserDAO users = new MemoryUserDAO();
     private static final AuthDAO auths = new MemoryAuthDAO();
     private static final GameDAO games = new MemoryGameDAO();
