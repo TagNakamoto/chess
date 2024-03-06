@@ -3,6 +3,7 @@ package service;
 import dataAccess.*;
 import model.AuthData;
 import model.UserData;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.UUID;
 
@@ -14,7 +15,7 @@ public class UserService {
             throw new RuntimeException(e);
         }
     }
-    private static final UserDAO users = new MemoryUserDAO();
+    private static final UserDAO users = new SQLUserDAO();
     private static final AuthDAO auths = new MemoryAuthDAO();
     private static final GameDAO games = new MemoryGameDAO();
     public UserService(){}
@@ -44,7 +45,11 @@ public class UserService {
             throw new DataAccessException("Error: email not required for this operation");
         }
 
-        if(correctInfo == null || !user.password().equals(correctInfo.password())){
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if(user.password()==null){
+            throw new DataAccessException("Error: unauthorized");
+        }
+        else if(correctInfo == null || !encoder.matches(user.password(), correctInfo.password())){
             throw new DataAccessException("Error: unauthorized");
         }
         else {

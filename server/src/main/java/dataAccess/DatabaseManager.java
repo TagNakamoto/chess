@@ -74,76 +74,69 @@ public class DatabaseManager {
 
     private static void createUsersTable() throws DataAccessException {
         try (Connection conn = getConnection()) {
-            var statement = "CREATE TABLE IF NOT EXISTS users" +
-                    "(" +
-                    "username varchar(60) not null primary key," +
-                    "password varchar(60) not null," +
-                    "email varchar(60) not null" +
+            String statement = "CREATE TABLE IF NOT EXISTS users (" +
+                    "username VARCHAR(60) NOT NULL PRIMARY KEY," +
+                    "password VARCHAR(60) NOT NULL," +
+                    "email VARCHAR(60) NOT NULL" +
                     ");";
-            try (var preparedStatement = conn.prepareStatement(statement)) {
+            try (PreparedStatement preparedStatement = conn.prepareStatement(statement)) {
                 preparedStatement.executeUpdate();
             }
-        }
-        catch (SQLException ex){
+        } catch (SQLException ex) {
             throw new DataAccessException(ex.getMessage());
         }
     }
-    static void createGamesTable() throws DataAccessException {
+    private static void createGamesTable() throws DataAccessException {
         try (Connection conn = getConnection()) {
-            var statement = "CREATE TABLE IF NOT EXISTS games" +
-                    "(" +
-                    "gameID integer not null primary key auto increment," +
-                    "whiteUsername varchar(60)," +
-                    "blackUsername varchar(60)," +
-                    "gameName varchar(60) not null," +
-                    "game varchar(255) not null ," +
-                    "foreign key(whiteUsername) references users(username)," +
-                    "foreign key(blackUsername) references users(username)" +
+            String statement = "CREATE TABLE IF NOT EXISTS games (" +
+                    "gameID INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL," +
+                    "whiteUsername VARCHAR(60)," +
+                    "blackUsername VARCHAR(60)," +
+                    "gameName VARCHAR(60) NOT NULL," +
+                    "game VARCHAR(255) NOT NULL," +
+                    "FOREIGN KEY (whiteUsername) REFERENCES users(username)," +
+                    "FOREIGN KEY (blackUsername) REFERENCES users(username)" +
                     ");";
-            try (var preparedStatement = conn.prepareStatement(statement)) {
+            try (PreparedStatement preparedStatement = conn.prepareStatement(statement)) {
                 preparedStatement.executeUpdate();
             }
-        }
-        catch (SQLException ex){
+        } catch (SQLException ex) {
             throw new DataAccessException(ex.getMessage());
         }
     }
 
-    static void createAuthsTable() throws DataAccessException {
+    private static void createAuthsTable() throws DataAccessException {
         try (Connection conn = getConnection()) {
-            var statement = "CREATE TABLE IF NOT EXISTS auths" +
-                    "(" +
-                    "authToken varchar(60) not null primary key," +
-                    "username varchar(60) not null," +
-                    "foreign key(username) references users(username)" +
+            String statement = "CREATE TABLE IF NOT EXISTS auths (" +
+                    "authToken VARCHAR(60) NOT NULL PRIMARY KEY," +
+                    "username VARCHAR(60) NOT NULL," +
+                    "FOREIGN KEY (username) REFERENCES users(username)" +
                     ");";
-            try (var preparedStatement = conn.prepareStatement(statement)) {
+            try (PreparedStatement preparedStatement = conn.prepareStatement(statement)) {
                 preparedStatement.executeUpdate();
             }
-        }
-        catch (SQLException ex){
+        } catch (SQLException ex) {
             throw new DataAccessException(ex.getMessage());
         }
     }
 
-    static void createObserversTable() throws DataAccessException {
+
+    private static void createObserversTable() throws DataAccessException {
         try (Connection conn = getConnection()) {
-        var statement = "CREATE TABLE IF NOT EXISTS observers" +
-                "(" +
-                "id integer not null primary key auto increment," +
-                "gameID integer not null," +
-                "username varchar(60) not null," +
-                "foreign key(gameID) references games(gameID)," +
-                "foreign key(username) references users(username)" +
-                ");";
-        try (var preparedStatement = conn.prepareStatement(statement)) {
-            preparedStatement.executeUpdate();
+            String statement = "CREATE TABLE IF NOT EXISTS observers (" +
+                    "id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL," +
+                    "gameID INTEGER NOT NULL," +
+                    "username VARCHAR(60) NOT NULL," +
+                    "FOREIGN KEY (gameID) REFERENCES games(gameID)," +
+                    "FOREIGN KEY (username) REFERENCES users(username)" +
+                    ");";
+            try (PreparedStatement preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException(ex.getMessage());
         }
     }
-        catch (SQLException ex){
-        throw new DataAccessException(ex.getMessage());
-    }
-}
 
 
 }

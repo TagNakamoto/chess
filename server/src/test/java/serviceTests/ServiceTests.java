@@ -1,12 +1,11 @@
 package serviceTests;
-import dataAccess.DataAccessException;
-import dataAccess.MemoryAuthDAO;
-import dataAccess.MemoryUserDAO;
+import dataAccess.*;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import service.GameService;
 import service.UserService;
 import java.util.HashSet;
@@ -27,13 +26,14 @@ public class ServiceTests {
     @Test
     public void normalRegisterTest(){
         UserService service = new UserService();
-        UserData normalUser = new UserData("taho", "password123", "email@u.com");
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        UserData normalUser = new UserData("taho", encoder.encode("password"), "email@u.com");
         try {
             AuthData auth = service.register(normalUser);
-            MemoryUserDAO users = new MemoryUserDAO();
+            UserDAO users = new SQLUserDAO();
             assertEquals(auth.username(), "taho");
             assertNotNull(auth.authToken());
-            assertEquals(users.getUser(normalUser.username()),normalUser);
+            assertTrue(encoder.matches(normalUser.password(), users.getUser(normalUser.username()).password()));
 
         }
         catch(DataAccessException ex){
@@ -50,8 +50,8 @@ public class ServiceTests {
 
     @Test
     public void clearDataTest(){
-        MemoryUserDAO users = new MemoryUserDAO();
-        MemoryAuthDAO auths = new MemoryAuthDAO();
+        UserDAO users = new SQLUserDAO();
+        AuthDAO auths = new MemoryAuthDAO();
         UserService service = new UserService();
 
         try {
@@ -71,7 +71,7 @@ public class ServiceTests {
         UserService service = new UserService();
         normalRegisterTest();
         try {
-            AuthData loginObject = service.login(new UserData("taho", "password123", null));
+            AuthData loginObject = service.login(new UserData("taho", "password", null));
             assertEquals("taho", loginObject.username());
             assertNotNull(loginObject.authToken());
         }
