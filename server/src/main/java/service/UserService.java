@@ -16,7 +16,7 @@ public class UserService {
         }
     }
     private static final UserDAO users = new SQLUserDAO();
-    private static final AuthDAO auths = new MemoryAuthDAO();
+    private static final AuthDAO auths = new SQLAuthDAO();
     private static final GameDAO games = new MemoryGameDAO();
     public UserService(){}
     public AuthData register(UserData user) throws DataAccessException{
@@ -33,9 +33,9 @@ public class UserService {
 
     }
     public void clear() throws DataAccessException{
-        users.clear();
-        auths.clear();
         games.clear();
+        auths.clear();
+        users.clear();
     }
     public AuthData login(UserData user) throws DataAccessException{
         String username = user.username();

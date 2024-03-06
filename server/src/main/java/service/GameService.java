@@ -14,7 +14,7 @@ public class GameService {
             throw new RuntimeException(e);
         }
     }
-    private static final AuthDAO auths = new MemoryAuthDAO();
+    private static final AuthDAO auths = new SQLAuthDAO();
     private static final GameDAO games = new MemoryGameDAO();
     public GameService(){}
     public int createGame(String gameName, String authToken) throws DataAccessException{
