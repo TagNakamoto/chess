@@ -15,7 +15,7 @@ public class GameService {
         }
     }
     private static final AuthDAO auths = new SQLAuthDAO();
-    private static final GameDAO games = new MemoryGameDAO();
+    private static final GameDAO games = new SQLGameDAO();
     public GameService(){}
     public int createGame(String gameName, String authToken) throws DataAccessException{
         AuthData authInMem = auths.getAuthFromToken(authToken);
