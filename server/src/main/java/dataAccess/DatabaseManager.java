@@ -93,7 +93,7 @@ public class DatabaseManager {
                     "whiteUsername VARCHAR(60)," +
                     "blackUsername VARCHAR(60)," +
                     "gameName VARCHAR(60) NOT NULL," +
-                    "game VARCHAR(255) NOT NULL," +
+                    "game VARCHAR(1000) NOT NULL," +
                     "FOREIGN KEY (whiteUsername) REFERENCES users(username)," +
                     "FOREIGN KEY (blackUsername) REFERENCES users(username)" +
                     ");";

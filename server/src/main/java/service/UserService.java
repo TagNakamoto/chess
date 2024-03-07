@@ -17,7 +17,7 @@ public class UserService {
     }
     private static final UserDAO users = new SQLUserDAO();
     private static final AuthDAO auths = new SQLAuthDAO();
-    private static final GameDAO games = new MemoryGameDAO();
+    private static final GameDAO games = new SQLGameDAO();
     public UserService(){}
     public AuthData register(UserData user) throws DataAccessException{
         String username = user.username();

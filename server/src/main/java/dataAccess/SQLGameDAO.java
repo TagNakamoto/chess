@@ -1,68 +1,136 @@
 package dataAccess;
 
 import chess.ChessGame;
+import chess.ChessPiece;
+import chess.PieceSerializer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import model.AuthData;
 import model.GameData;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 public class SQLGameDAO implements GameDAO {
+    private static final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(ChessPiece.class, new PieceSerializer())
+            .create();
     @Override
-    public int insertGame(String gameName){
-//        GameData tempGame = new GameData(numGames, null,null, gameName, new ChessGame());
-//        games.put(numGames, tempGame);
-//        int tempNum = numGames;
-//        numGames++;
-//        return tempNum;
+    public int insertGame(String gameName) throws DataAccessException{
+        String statement = "INSERT INTO games (gameName, game) values (?, ?);";
+        if(gameName==null){
+            throw new DataAccessException("Error: bad request");
+        }
+        try(PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, gameName);
+            ChessGame game = new ChessGame();
+            String gameString = gson.toJson(game);
+            stmt.setString(2, gameString);
+            if (stmt.executeUpdate() != 1) {
+                throw new DataAccessException("Error: Could not insert into auth database");
+            } else {
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    generatedKeys.next();
+                    return generatedKeys.getInt(1); // ID of the inserted game
+                } catch (SQLException ex) {
+                    throw new DataAccessException(ex.getMessage());
+                }
+            }
+        }
+        catch (SQLException ex){
+            throw new DataAccessException(ex.getMessage());
+        }
     }
     @Override
-    public void clear(){
-//        games.clear();
-//        observers.clear();
-//        numGames = 1;
+    public void clear() throws DataAccessException {
+        String statement = "DELETE FROM games;";
+        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)){
+            stmt.executeUpdate();
+        }
+        catch (SQLException ex){
+            throw new DataAccessException(ex.getMessage());
+        }
+        statement = "DELETE FROM observers;";
+        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)){
+            stmt.executeUpdate();
+        }
+        catch (SQLException ex){
+            throw new DataAccessException(ex.getMessage());
+        }
     }
     @Override
     public void addObserver(int gameID, String username) throws DataAccessException{
-//        if(!games.containsKey(gameID)){
-//            throw new DataAccessException("Error: bad request");
-//        }
-//        else {
-//            observers.merge(gameID, new HashSet<>(Collections.singletonList(username)), (existingSet, unused) -> {
-//                existingSet.add(username);
-//                return existingSet;
-//            });
-//        }
+        String statement = "INSERT INTO observers (gameID, observerName) values (?, ?);";
+        if(gameID==0 || username==null){
+            throw new DataAccessException("Error: bad request");
+        }
+        try(PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)) {
+            stmt.setInt(1, gameID);
+            stmt.setString(2, username);
+            if (stmt.executeUpdate() != 1) {
+                throw new DataAccessException("Error: Could not insert into auth database");
+            }
+        }
+        catch (SQLException ex){
+            throw new DataAccessException(ex.getMessage());
+        }
     }
     @Override
-    public void addPlayer(String playerColor, int gameID, String playerName) throws DataAccessException{
-//        if(!games.containsKey(gameID)){
-//            throw new DataAccessException("Error: bad request");
-//        }
-//        else{
-//            GameData updateGame = games.get(gameID);
-//            if(playerColor.equals("WHITE") && updateGame.whiteUsername() == null){
-//                games.put(gameID, new GameData(gameID, playerName, updateGame.blackUsername(),
-//                        updateGame.gameName(), updateGame.game()));
-//            }
-//            else if(playerColor.equals("BLACK") && updateGame.blackUsername() == null){
-//                games.put(gameID, new GameData(gameID, updateGame.whiteUsername(), playerName,
-//                        updateGame.gameName(), updateGame.game()));
-//            }
-//            else if(playerColor.equals("WHITE") || playerColor.equals("BLACK")){
-//                throw new DataAccessException("Error: already taken");
-//            }
-//            else{
-//                throw new DataAccessException("Error: bad request");
-//            }
-//        }
+    public void addPlayer(String playerColor, int gameID, String playerName) throws DataAccessException {
+        String statement = "UPDATE games " +
+                "SET %s = ? " +  // Placeholder for column name
+                "WHERE gameID = ?";
+        if (gameID == 0 || playerName == null || playerColor == null) {
+            throw new DataAccessException("Error: bad request");
+        }
+
+        String columnName;
+        if (playerColor.equals("WHITE")) {
+            columnName = "whiteUsername";
+        } else if (playerColor.equals("BLACK")) {
+            columnName = "blackUsername";
+        } else {
+            throw new DataAccessException("Error: invalid player color");
+        }
+
+        statement = String.format(statement, columnName);
+
+        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)) {
+            stmt.setString(1, playerName);
+            stmt.setInt(2, gameID);
+
+            if (stmt.executeUpdate() != 1) {
+                throw new DataAccessException("Error: Could not update game record");
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException(ex.getMessage());
+        }
     }
 
+
     @Override
-    public HashSet<GameData> listGames(){
-//        HashSet<GameData> gamesList = new HashSet<>();
-//        Set<Integer> gameIDs = games.keySet();
-//        for(Integer gameID : gameIDs){
-//            gamesList.add(games.get(gameID));
-//        }
-//        return gamesList;
+    public HashSet<GameData> listGames() throws DataAccessException {
+        HashSet<GameData> gamesList = new HashSet<>();
+        String statement = "SELECT gameID, whiteUsername, blackUsername, gameName, game FROM games";
+        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)){
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                int gameID = rs.getInt("gameID");
+                String whiteUsername = rs.getString("whiteUsername");
+                String blackUsername = rs.getString("blackUsername");
+                String gameName = rs.getString("gameName");
+                String gameString = rs.getString("game");
+                ChessGame gameObject = gson.fromJson(gameString, ChessGame.class);
+                gamesList.add(new GameData(gameID, whiteUsername, blackUsername, gameName, gameObject));
+            }
+            return gamesList;
+        }
+        catch (SQLException ex){
+            throw new DataAccessException(ex.getMessage());
+        }
     }
+
 }
