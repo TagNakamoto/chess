@@ -5,7 +5,6 @@ import model.AuthData;
 import model.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -114,6 +113,32 @@ public class SQLAuthTests {
 
         AuthData newAuth = new AuthData("Pretend authToken", "normal username");
         assertThrows(DataAccessException.class, ()-> authDAO.deleteAuth(newAuth));
+    }
 
+    @Test
+    public void normalGetAuth() {
+        AuthDAO authDAO = new SQLAuthDAO();
+        UserDAO userDAO = new SQLUserDAO();
+        try {
+            AuthData newAuth = new AuthData("Pretend authToken", "normal username");
+            UserData newUser = new UserData("normal username", "password", "email");
+
+            userDAO.insertUser(newUser);
+            authDAO.insertAuth(newAuth);
+            AuthData retrievedAuth = authDAO.getAuthFromToken(newAuth.authToken());
+
+            assertEquals(retrievedAuth.authToken(), newAuth.authToken());
+            assertEquals(retrievedAuth.username(), newAuth.username());
+        }
+        catch(DataAccessException ex){
+            fail("Unexpected exception:" + ex.getMessage());
+        }
+    }
+
+    @Test
+    public void noAuthGetAuth() {
+        AuthDAO authDAO = new SQLAuthDAO();
+
+        assertThrows(DataAccessException.class, ()-> authDAO.getAuthFromToken("authToken that DNE"));
     }
 }
