@@ -1,9 +1,7 @@
 package dataAccessTests;
 
 import dataAccess.*;
-import model.AuthData;
 import model.UserData;
-import model.GameData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -118,7 +116,7 @@ public class SQLGamesTests {
         String gameName = "This is a game name";
         try {
             int gameID = gameDAO.insertGame(gameName);
-            assertEquals(gameID, gameDAO.listGames().stream().toList().get(0).gameID());
+            assertEquals(gameID, gameDAO.listGames().stream().toList().getFirst().gameID());
         }
         catch(DataAccessException ex){
             fail("Unexpected exception:" + ex.getMessage());
@@ -134,6 +132,5 @@ public class SQLGamesTests {
         catch(DataAccessException ex){
             fail("Unexpected exception:" + ex.getMessage());
         }
-    }
     }
 }
