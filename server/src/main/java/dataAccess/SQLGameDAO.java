@@ -6,13 +6,9 @@ import chess.PieceDeserializer;
 import chess.PieceSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import model.AuthData;
 import model.GameData;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
 
 public class SQLGameDAO implements GameDAO {
@@ -26,7 +22,8 @@ public class SQLGameDAO implements GameDAO {
         if(gameName==null){
             throw new DataAccessException("Error: bad request");
         }
-        try(PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement, Statement.RETURN_GENERATED_KEYS)) {
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, gameName);
             ChessGame game = new ChessGame();
             String gameString = gson.toJson(game);
@@ -50,12 +47,14 @@ public class SQLGameDAO implements GameDAO {
     public void clear() throws DataAccessException {
         try {
             String statement = "DELETE FROM observers";
-            try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)) {
+            try (Connection conn = DatabaseManager.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(statement)) {
                 stmt.executeUpdate();
             }
 
             statement = "DELETE FROM games";
-            try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)) {
+            try (Connection conn = DatabaseManager.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(statement)) {
                 stmt.executeUpdate();
             }
         } catch (SQLException ex) {
@@ -68,7 +67,8 @@ public class SQLGameDAO implements GameDAO {
         if(gameID==0 || username==null){
             throw new DataAccessException("Error: bad request");
         }
-        try(PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)) {
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(statement)) {
             stmt.setInt(1, gameID);
             stmt.setString(2, username);
             if (stmt.executeUpdate() != 1) {
@@ -92,7 +92,8 @@ public class SQLGameDAO implements GameDAO {
         String currentWhiteUsername = "";
         String currentBlackUsername = "";
         String queryStatement = "SELECT whiteUsername, blackUsername FROM games WHERE gameID=(?)";
-        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(queryStatement)){
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(queryStatement)){
             stmt.setInt(1, gameID);
 
             ResultSet rs = stmt.executeQuery();
@@ -115,7 +116,8 @@ public class SQLGameDAO implements GameDAO {
 
         statement = String.format(statement, columnName);
 
-        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)) {
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(statement)) {
             stmt.setString(1, playerName);
             stmt.setInt(2, gameID);
 
@@ -132,7 +134,8 @@ public class SQLGameDAO implements GameDAO {
     public HashSet<GameData> listGames() throws DataAccessException {
         HashSet<GameData> gamesList = new HashSet<>();
         String statement = "SELECT gameID, whiteUsername, blackUsername, gameName, game FROM games";
-        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)){
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(statement)){
             ResultSet rs = stmt.executeQuery();
             while(rs.next()) {
                 int gameID = rs.getInt("gameID");

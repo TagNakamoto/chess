@@ -3,6 +3,7 @@ package dataAccess;
 import model.UserData;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +15,8 @@ public class SQLUserDAO implements UserDAO {
         if(u.password()==null){
             throw new DataAccessException("Error: bad request");
         }
-        try(PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)){
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(statement)){
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             String hashedPassword = encoder.encode(u.password());
 
@@ -33,7 +35,8 @@ public class SQLUserDAO implements UserDAO {
     @Override
     public UserData getUser(String username) throws DataAccessException {
         String statement = "SELECT password FROM users where username=?";
-        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)){
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(statement)){
             stmt.setString(1, username);
 
             ResultSet rs = stmt.executeQuery();
@@ -52,7 +55,8 @@ public class SQLUserDAO implements UserDAO {
     @Override
     public void clear() throws DataAccessException{
         String statement = "DELETE FROM users;";
-        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)){
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(statement)){
             stmt.executeUpdate();
         }
         catch (SQLException ex){
@@ -62,7 +66,8 @@ public class SQLUserDAO implements UserDAO {
     @Override
     public boolean isEmpty() throws DataAccessException {
       String statement = "SELECT COUNT(*) FROM users";
-        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)){
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(statement)){
             ResultSet rs = stmt.executeQuery();
             if(rs.next()) {
                 int count = rs.getInt(1);

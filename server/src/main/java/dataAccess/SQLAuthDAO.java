@@ -1,8 +1,7 @@
 package dataAccess;
 
 import model.AuthData;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +13,8 @@ public class SQLAuthDAO implements AuthDAO{
         if(auth.authToken()==null){
             throw new DataAccessException("Error: bad request");
         }
-        try(PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)){
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(statement)){
             stmt.setString(1, auth.authToken());
             stmt.setString(2, auth.username());
 
@@ -29,7 +29,8 @@ public class SQLAuthDAO implements AuthDAO{
     @Override
     public void clear() throws DataAccessException{
         String statement = "DELETE FROM auths;";
-        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)){
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(statement)){
             stmt.executeUpdate();
         }
         catch (SQLException ex){
@@ -39,7 +40,8 @@ public class SQLAuthDAO implements AuthDAO{
     @Override
     public boolean isEmpty() throws DataAccessException {
         String statement = "SELECT COUNT(*) FROM auths";
-        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)){
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(statement)){
             ResultSet rs = stmt.executeQuery();
             if(rs.next()) {
                 int count = rs.getInt(1);
@@ -54,7 +56,8 @@ public class SQLAuthDAO implements AuthDAO{
     @Override
     public void deleteAuth(AuthData authData) throws DataAccessException {
         String statement = "DELETE FROM auths WHERE authToken=?;";
-        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)){
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(statement)){
             stmt.setString(1, authData.authToken());
             stmt.executeUpdate();
         }
@@ -65,7 +68,8 @@ public class SQLAuthDAO implements AuthDAO{
     @Override
     public AuthData getAuthFromToken(String authToken) throws DataAccessException{
         String statement = "SELECT username FROM auths where authToken=?";
-        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)){
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(statement)){
             stmt.setString(1, authToken);
 
             ResultSet rs = stmt.executeQuery();
