@@ -50,4 +50,32 @@ public class SQLGamesTests {
         assertThrows(DataAccessException.class, ()->gameDAO.insertGame(null));
     }
 
+    @Test
+    public void normalAddObserverTest(){
+        UserDAO userDAO = new SQLUserDAO();
+        GameDAO gameDAO = new SQLGameDAO();
+        String gameName = "This is a game name";
+        try{
+            UserData newObserver = new UserData("observer", "password", "email");
+            userDAO.insertUser(newObserver);
+            int gameID = gameDAO.insertGame(gameName);
+            gameDAO.addObserver(gameID, newObserver.username());
+        }
+        catch(DataAccessException ex){
+            fail("Unexpected exception:" + ex.getMessage());
+        }
+    }
+
+    @Test
+    public void userDNEAddObserverTest(){
+        GameDAO gameDAO = new SQLGameDAO();
+        String gameName = "This is a game name";
+        try{
+            int gameID = gameDAO.insertGame(gameName);
+            assertThrows(DataAccessException.class, ()-> gameDAO.addObserver(gameID, "username DNE"));
+        }
+        catch(DataAccessException ex){
+            fail("Unexpected exception:" + ex.getMessage());
+        }
+    }
 }
