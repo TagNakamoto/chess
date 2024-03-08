@@ -2,6 +2,7 @@ package dataAccess;
 
 import chess.ChessGame;
 import chess.ChessPiece;
+import chess.PieceDeserializer;
 import chess.PieceSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,6 +18,7 @@ import java.util.*;
 public class SQLGameDAO implements GameDAO {
     private static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(ChessPiece.class, new PieceSerializer())
+            .registerTypeAdapter(ChessPiece.class, new PieceDeserializer())
             .create();
     @Override
     public int insertGame(String gameName) throws DataAccessException{
@@ -46,24 +48,23 @@ public class SQLGameDAO implements GameDAO {
     }
     @Override
     public void clear() throws DataAccessException {
-        String statement = "DELETE FROM games;";
-        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)){
-            stmt.executeUpdate();
-        }
-        catch (SQLException ex){
-            throw new DataAccessException(ex.getMessage());
-        }
-        statement = "DELETE FROM observers;";
-        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)){
-            stmt.executeUpdate();
-        }
-        catch (SQLException ex){
+        try {
+            String statement = "DELETE FROM observers";
+            try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)) {
+                stmt.executeUpdate();
+            }
+
+            statement = "DELETE FROM games";
+            try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)) {
+                stmt.executeUpdate();
+            }
+        } catch (SQLException ex) {
             throw new DataAccessException(ex.getMessage());
         }
     }
     @Override
     public void addObserver(int gameID, String username) throws DataAccessException{
-        String statement = "INSERT INTO observers (gameID, observerName) values (?, ?);";
+        String statement = "INSERT INTO observers (gameID, username) values (?, ?);";
         if(gameID==0 || username==null){
             throw new DataAccessException("Error: bad request");
         }
@@ -88,13 +89,29 @@ public class SQLGameDAO implements GameDAO {
         }
 
         String columnName;
-        if (playerColor.equals("WHITE")) {
-            columnName = "whiteUsername";
-        } else if (playerColor.equals("BLACK")) {
-            columnName = "blackUsername";
-        } else {
-            throw new DataAccessException("Error: invalid player color");
+        String currentWhiteUsername = "";
+        String currentBlackUsername = "";
+        String queryStatement = "SELECT whiteUsername, blackUsername FROM games WHERE gameID=(?)";
+        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(queryStatement)){
+            stmt.setInt(1, gameID);
+
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                currentWhiteUsername = rs.getString(1);
+                currentBlackUsername = rs.getString(2);
+            }
+            if (playerColor.equals("WHITE") && currentWhiteUsername == null ) {
+                columnName = "whiteUsername";
+            } else if (playerColor.equals("BLACK") && currentBlackUsername == null) {
+                columnName = "blackUsername";
+            } else {
+                throw new DataAccessException("Error: already taken");
+            }
         }
+        catch (SQLException ex){
+            throw new DataAccessException(ex.getMessage());
+        }
+
 
         statement = String.format(statement, columnName);
 
