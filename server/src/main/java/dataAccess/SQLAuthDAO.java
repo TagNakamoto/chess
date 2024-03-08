@@ -56,7 +56,9 @@ public class SQLAuthDAO implements AuthDAO{
         String statement = "DELETE FROM auths WHERE authToken=?;";
         try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(statement)){
             stmt.setString(1, authData.authToken());
-            stmt.executeUpdate();
+            if(stmt.executeUpdate()!=1){
+                throw new DataAccessException("Error: unauthorized");
+            };
         }
         catch (SQLException ex){
             throw new DataAccessException(ex.getMessage());
@@ -73,7 +75,7 @@ public class SQLAuthDAO implements AuthDAO{
                 return new AuthData(authToken, rs.getString(1));
             }
             else{
-                return null;
+                throw new DataAccessException("Error: unauthorized");
             }
         }
         catch (SQLException ex){
@@ -81,8 +83,4 @@ public class SQLAuthDAO implements AuthDAO{
         }
     }
 
-    @Override
-    public String toString() {
-        return "SQLAuthDAO{}";
-    }
 }
