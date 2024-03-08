@@ -6,7 +6,6 @@ import chess.PieceDeserializer;
 import chess.PieceSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import model.AuthData;
 import model.GameData;
 
 import java.sql.PreparedStatement;
@@ -111,7 +110,6 @@ public class SQLGameDAO implements GameDAO {
         catch (SQLException ex){
             throw new DataAccessException(ex.getMessage());
         }
-
 
         statement = String.format(statement, columnName);
 
