@@ -1,5 +1,8 @@
 package server;
 
+import chess.ChessPiece;
+import chess.PieceDeserializer;
+import chess.PieceSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -18,7 +21,11 @@ public class Handler {
     private static final UserService userService = new UserService();
     private static final GameService gameService = new GameService();
     public Handler() {
-        gson = new GsonBuilder().serializeNulls().create();
+        gson = new GsonBuilder()
+                .serializeNulls()
+                .registerTypeAdapter(ChessPiece.class, new PieceSerializer())
+                .registerTypeAdapter(ChessPiece.class, new PieceDeserializer())
+                .create();
     }
     public String registerHandler (Request req, Response res){
         UserData regisObj = decodeBodyJSON(req, UserData.class);
