@@ -84,4 +84,29 @@ public class SQLUserTests {
 
         assertThrows(DataAccessException.class, ()->userDAO.getUser(userNotInDatabase.username()));
     }
+
+    @Test
+    public void emptyTableTest(){
+        UserDAO userDAO = new SQLUserDAO();
+        try {
+            assertTrue(userDAO.isEmpty());
+        }
+        catch(DataAccessException ex){
+            fail("Unexpected exception:" + ex.getMessage());
+        }
+    }
+
+    @Test
+    public void notEmptyTableTest() {
+        UserDAO userDAO = new SQLUserDAO();
+        try {
+            UserData newUser = new UserData("Normal user", "password", "email");
+
+            userDAO.insertUser(newUser);
+            assertFalse(userDAO.isEmpty());
+        }
+        catch(DataAccessException ex){
+            fail("Unexpected exception:" + ex.getMessage());
+        }
+    }
 }
