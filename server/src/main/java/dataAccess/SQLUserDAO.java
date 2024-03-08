@@ -42,7 +42,7 @@ public class SQLUserDAO implements UserDAO {
                 return new UserData(username, hashedPassword, null);
             }
             else{
-                return null;
+                throw new DataAccessException("Error: bad request");
             }
         }
         catch (SQLException ex){

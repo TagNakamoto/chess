@@ -57,4 +57,31 @@ public class SQLUserTests {
         assertThrows(DataAccessException.class, ()-> userDAO.insertUser(newUser));
 
     }
+
+    @Test
+    public void normalGetUserTest(){
+        UserDAO userDAO = new SQLUserDAO();
+        try{
+            UserData newUser = new UserData("Normal user", "password", "email");
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+            userDAO.insertUser(newUser);
+            UserData retrievedUser = userDAO.getUser(newUser.username());
+
+            assertEquals(newUser.username(), retrievedUser.username());
+            assertTrue(encoder.matches(newUser.password(), retrievedUser.password()));
+            assertNull(retrievedUser.email());
+        }
+        catch(DataAccessException ex){
+            fail("Unexpected exception:" + ex.getMessage());
+        }
+    }
+
+    @Test
+    public void userDNEGetUserTest(){
+        UserDAO userDAO = new SQLUserDAO();
+        UserData userNotInDatabase = new UserData("Not in system", "not a real password", "email");
+
+        assertThrows(DataAccessException.class, ()->userDAO.getUser(userNotInDatabase.username()));
+    }
 }
