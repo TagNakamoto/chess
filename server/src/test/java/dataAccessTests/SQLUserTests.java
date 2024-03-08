@@ -81,8 +81,12 @@ public class SQLUserTests {
     public void userDNEGetUserTest(){
         UserDAO userDAO = new SQLUserDAO();
         UserData userNotInDatabase = new UserData("Not in system", "not a real password", "email");
-
-        assertThrows(DataAccessException.class, ()->userDAO.getUser(userNotInDatabase.username()));
+        try{
+        assertNull(userDAO.getUser(userNotInDatabase.username()));
+        }
+        catch(DataAccessException ex){
+        fail("Unexpected exception:" + ex.getMessage());
+        }
     }
 
     @Test
