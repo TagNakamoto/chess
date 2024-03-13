@@ -116,11 +116,11 @@ public class UIChessBoard {
         out.print(SET_TEXT_BOLD);
         drawTopBottom(out);
         setDarkGrayBorder(out);
-        for(int i = 1; i <= 8; i++){  // Iterate from 1 to 8 (backwards)
+        for(int i = 1; i <= 8; i++){
             setDarkGrayBorder(out);
             out.print("\n");
             printGraySquare(out, String.valueOf(i));
-            for(int j = 4; j >= 1; j--){  // Iterate from 4 to 1 (backwards)
+            for(int j = 4; j >= 1; j--){
                 if(i % 2 == 1){
 
                     printWhiteSquare(out, piecesLetter[i - 1][(j - 1) * 2 + 1]);
