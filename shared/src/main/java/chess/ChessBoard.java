@@ -95,15 +95,15 @@ public class ChessBoard {
 
     }
 
-    public String[] boardToStringArray(){
-        String[] pieceLetterArray = new String[64];
+    public String[][] boardToStringArray(){
+        String[][] pieceLetterArray = new String[8][8];
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                 if (squares[row][col] != null) {
-                    pieceLetterArray[row*8+col] = squares[row][col].toString();
+                    pieceLetterArray[row][col] = squares[row][col].toString();
                 } else {
                     // If no piece is present, represent an empty square
-                    pieceLetterArray[row*8+col] = " ";
+                    pieceLetterArray[row][col] = " ";
                 }
             }
         }

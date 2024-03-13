@@ -118,12 +118,12 @@ public class ChessPiece implements Cloneable {
     @Override
     public String toString() {
         return switch (type) {
-            case KING -> pieceColor == ChessGame.TeamColor.WHITE ? "K" : "k";
-            case QUEEN -> pieceColor == ChessGame.TeamColor.WHITE ? "Q" : "q";
-            case ROOK -> pieceColor == ChessGame.TeamColor.WHITE ? "R" : "r";
-            case BISHOP -> pieceColor == ChessGame.TeamColor.WHITE ? "B" : "b";
-            case KNIGHT -> pieceColor == ChessGame.TeamColor.WHITE ? "N" : "n";
-            case PAWN -> pieceColor == ChessGame.TeamColor.WHITE ? "P" : "p";
+            case KING -> pieceColor == ChessGame.TeamColor.WHITE ? "K" :"k";//"♔" : "♚";
+            case QUEEN -> pieceColor == ChessGame.TeamColor.WHITE ? "Q":"q";//"♕" : "♛";
+            case ROOK -> pieceColor == ChessGame.TeamColor.WHITE ? "R":"r";//"♖" : "♜";
+            case BISHOP -> pieceColor == ChessGame.TeamColor.WHITE ? "B":"b";//"♗" : "♝";
+            case KNIGHT -> pieceColor == ChessGame.TeamColor.WHITE ? "N":"n";//"♘" : "♞";
+            case PAWN -> pieceColor == ChessGame.TeamColor.WHITE ? "P":"p";//"♙" : "♟";
         };
 
     }

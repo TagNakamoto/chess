@@ -25,7 +25,7 @@ public class UIChessBoard {
 
     private static void drawTopBottom(PrintStream out){
         setLightGrayBorder(out);
-        String[] letters = {"h", "g", "f", "e", "d", "c", "b", "a"};
+        String[] letters = {"a", "b", "c", "d", "e", "f", "g", "h"};//{"h", "g", "f", "e", "d", "c", "b", "a"};
         out.print(SPACER.repeat(BUFFER_SIZE));
         for(String let: letters){
             printGraySquare(out, let);
@@ -53,38 +53,50 @@ public class UIChessBoard {
         setLightGrayBorder(out);
         printSquare(out, c);
     }
+    private static void setRedLetters(PrintStream out){
+        out.print(SET_TEXT_COLOR_MAGENTA);
+    }
+    private static void setBlueLetters(PrintStream out){
+        out.print(SET_TEXT_COLOR_BLUE);
+    }
 
     private static void printBlackSquare(PrintStream out, String c){
         setDarkGreenBG(out);
+        if(c.charAt(0)>='A' && c.charAt(0) <='Z'){
+            setRedLetters(out);
+        }
+        else if(c.charAt(0)>='a' && c.charAt(0) <='z'){
+            setBlueLetters(out);
+        }
         printSquare(out, c);
     }
 
     private static void printWhiteSquare(PrintStream out, String c){
         setWhiteBG(out);
+        if(c.charAt(0)>='A' && c.charAt(0) <='Z'){
+            setRedLetters(out);
+        }
+        else if(c.charAt(0)>='a' && c.charAt(0) <='z'){
+            setBlueLetters(out);
+        }
         printSquare(out, c);
     }
-    private static void printBoard(PrintStream out, String[] piecesLetter){
+    private static void printBoard(PrintStream out, String[][] piecesLetter){
         out.print(SET_TEXT_BOLD);
-
-        int piecesIndex = 0;
         drawTopBottom(out);
         setDarkGrayBorder(out);
-        for(int i=1; i<=8; i++){
+        for(int i=8; i>=1; i--){
             setDarkGrayBorder(out);
             out.print("\n");
             printGraySquare(out, String.valueOf(i));
             for(int j=1; j<=4; j++){
                 if(i%2 == 1){
-                    printWhiteSquare(out, piecesLetter[piecesIndex]);
-                    piecesIndex++;
-                    printBlackSquare(out, piecesLetter[piecesIndex]);
-                    piecesIndex++;
+                    printBlackSquare(out, piecesLetter[i-1][(j-1)*2]);
+                    printWhiteSquare(out, piecesLetter[i-1][(j-1)*2+1]);
                 }
                 else{
-                    printBlackSquare(out, piecesLetter[piecesIndex]);
-                    piecesIndex++;
-                    printWhiteSquare(out, piecesLetter[piecesIndex]);
-                    piecesIndex++;
+                    printWhiteSquare(out, piecesLetter[i-1][(j-1)*2]);
+                    printBlackSquare(out, piecesLetter[i-1][(j-1)*2+1]);
                 }
             }
             printGraySquare(out, String.valueOf(i));
