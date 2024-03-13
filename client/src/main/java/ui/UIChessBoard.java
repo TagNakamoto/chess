@@ -1,5 +1,8 @@
 package ui;
 
+import chess.ChessBoard;
+import chess.ChessGame;
+
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
@@ -85,5 +88,6 @@ public class UIChessBoard {
         setDarkGrayBorder(out);
         out.print("\n");
         drawTopBottom(out);
+        out.print("\n");
     }
 }

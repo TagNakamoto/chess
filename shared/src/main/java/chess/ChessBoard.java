@@ -12,7 +12,7 @@ public class ChessBoard {
     private final ChessPiece[][] squares = new ChessPiece[8][8];
 
     public ChessBoard() {
-
+        resetBoard();
     }
 
     /**
@@ -93,6 +93,21 @@ public class ChessBoard {
         squares[6][6] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
         squares[6][7] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
 
+    }
+
+    public String[] boardToStringArray(){
+        String[] pieceLetterArray = new String[64];
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                if (squares[row][col] != null) {
+                    pieceLetterArray[row*8+col] = squares[row][col].toString();
+                } else {
+                    // If no piece is present, represent an empty square
+                    pieceLetterArray[row*8+col] = " ";
+                }
+            }
+        }
+        return pieceLetterArray;
     }
 
     @Override
