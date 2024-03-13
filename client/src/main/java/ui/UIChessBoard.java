@@ -1,7 +1,6 @@
 package ui;
 
 import chess.ChessBoard;
-import chess.ChessGame;
 
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
@@ -15,7 +14,8 @@ public class UIChessBoard {
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
         out.print(ERASE_SCREEN);
 
-        printBoard(out);
+        ChessBoard board = new ChessBoard();
+        printBoard(out, board.boardToStringArray());
     }
 
     private static void setLightGrayBorder(PrintStream out) {
@@ -63,9 +63,10 @@ public class UIChessBoard {
         setWhiteBG(out);
         printSquare(out, c);
     }
-    private static void printBoard(PrintStream out){
+    private static void printBoard(PrintStream out, String[] piecesLetter){
         out.print(SET_TEXT_BOLD);
 
+        int piecesIndex = 0;
         drawTopBottom(out);
         setDarkGrayBorder(out);
         for(int i=1; i<=8; i++){
@@ -74,12 +75,16 @@ public class UIChessBoard {
             printGraySquare(out, String.valueOf(i));
             for(int j=1; j<=4; j++){
                 if(i%2 == 1){
-                    printWhiteSquare(out, SPACER);
-                    printBlackSquare(out, SPACER);
+                    printWhiteSquare(out, piecesLetter[piecesIndex]);
+                    piecesIndex++;
+                    printBlackSquare(out, piecesLetter[piecesIndex]);
+                    piecesIndex++;
                 }
                 else{
-                    printBlackSquare(out, SPACER);
-                    printWhiteSquare(out, SPACER);
+                    printBlackSquare(out, piecesLetter[piecesIndex]);
+                    piecesIndex++;
+                    printWhiteSquare(out, piecesLetter[piecesIndex]);
+                    piecesIndex++;
                 }
             }
             printGraySquare(out, String.valueOf(i));
@@ -88,6 +93,7 @@ public class UIChessBoard {
         setDarkGrayBorder(out);
         out.print("\n");
         drawTopBottom(out);
+        setDarkGrayBorder(out);
         out.print("\n");
     }
 }
