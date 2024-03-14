@@ -69,6 +69,7 @@ public class UIMenu {
                         break;
                     case 3:
                         System.out.print("""
+                                
                                 Enter the corresponding number to do the following:
                                 1. Register for an account with a username, password, and email address
                                 2. Log into an account you made previously with username and password
@@ -115,12 +116,13 @@ public class UIMenu {
                         break;
                     case 5:
                         System.out.print("""
-                                Enter the corresponding number to do the following:
-                                1. Create a new chess game with a custom name
-                                2. List all of the ongoing games
-                                3. Join a game by supplying the game ID and your desired color
-                                4. Observe a game by supplying the game ID
-                                5. See this help page again
+                                
+                               Enter the corresponding number to do the following:
+                               1. Create a new chess game with a custom name
+                               2. List all of the ongoing games
+                               3. Join a game by supplying the game ID and your desired color
+                               4. Observe a game by supplying the game ID
+                               5. See this help page again
                                6. Log out and return to the pre-login menu
                                """);
                         System.out.println("Press Enter to continue...");
