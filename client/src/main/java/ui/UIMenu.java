@@ -1,5 +1,8 @@
 package ui;
 
+import ServerFacade.ServerFacade;
+import model.UserData;
+
 import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
@@ -7,6 +10,10 @@ public class UIMenu {
     private State state = State.SIGNEDOUT;
     private boolean running = true;
     private final Scanner scanner = new Scanner(System.in);
+    private final String serverUrl = "http://localhost:8080";
+    private final ServerFacade serverFacade = new ServerFacade(serverUrl);
+    private String authToken = null;
+
     public void run(){
         clearConsole();
         while(running) {
@@ -53,19 +60,47 @@ public class UIMenu {
         String line = scanner.nextLine();
         var numbers = line.split(" ");
         int commandNum;
+        String username;
+        String password;
         if (numbers.length > 0) {
             try {
                 commandNum = Integer.parseInt(numbers[0]);
                 switch(commandNum){
                     case 1:
-                        System.out.print("Registering\n");
-                        state = State.SIGNEDIN;
-                        postLoginLoop();
+                        System.out.print("Please enter your username:");
+
+                        username = scanner.nextLine();
+                        System.out.print("Please enter your password:");
+                        password = scanner.nextLine();
+                        System.out.print("Please enter your email:");
+                        String email = scanner.nextLine();
+                        UserData userRegister = new UserData(username, password, email);
+                        try {
+                            authToken = serverFacade.facadeRegister(userRegister).authToken();
+                            state = State.SIGNEDIN;
+                            postLoginLoop();
+                        }
+                        catch (Exception ex){
+                            System.out.print("Sorry, an error was encountered");
+                            System.out.print(ex.getMessage());
+                        }
+
                         break;
                     case 2:
-                        System.out.print("Logging in\n");
-                        state = State.SIGNEDIN;
-                        postLoginLoop();
+                        System.out.print("Logging in\nPlease enter your username:\n");
+                        username = scanner.nextLine();
+                        System.out.print("Please enter your password:\n");
+                        password = scanner.nextLine();
+                        UserData userLogin = new UserData(username, password, null);
+                        try {
+                            authToken = serverFacade.facadeLogin(userLogin).authToken();
+                            state = State.SIGNEDIN;
+                            postLoginLoop();
+                        }
+                        catch (Exception ex){
+                            System.out.print("Sorry, an error was encountered");
+                            System.out.print(ex.getMessage());
+                        }
                         break;
                     case 3:
                         System.out.print("""

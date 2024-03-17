@@ -2,6 +2,7 @@ package clientTests;
 
 import org.junit.jupiter.api.*;
 import server.Server;
+import ui.UIMenu;
 
 
 public class ServerFacadeTests {
@@ -23,6 +24,9 @@ public class ServerFacadeTests {
 
     @Test
     public void sampleTest() {
+        UIMenu menu = new UIMenu();
+        menu.run();
+
         Assertions.assertTrue(true);
     }
 

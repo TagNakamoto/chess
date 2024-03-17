@@ -17,16 +17,14 @@ import java.util.HashSet;
 import java.util.Objects;
 
 public class Handler {
-    private final Gson gson;
+    private final Gson gson= new GsonBuilder()
+            .serializeNulls()
+            .registerTypeAdapter(ChessPiece.class, new PieceSerializer())
+            .registerTypeAdapter(ChessPiece.class, new PieceDeserializer())
+            .create();
     private static final UserService userService = new UserService();
     private static final GameService gameService = new GameService();
-    public Handler() {
-        gson = new GsonBuilder()
-                .serializeNulls()
-                .registerTypeAdapter(ChessPiece.class, new PieceSerializer())
-                .registerTypeAdapter(ChessPiece.class, new PieceDeserializer())
-                .create();
-    }
+
     public String registerHandler (Request req, Response res){
         UserData regisObj = decodeBodyJSON(req, UserData.class);
         try{
@@ -51,7 +49,7 @@ public class Handler {
         }
 
     }
-    public String clearHandler (Request req, Response res){
+    public String clearHandler (Response res){
         try {
             userService.clear();
             res.status(200);
