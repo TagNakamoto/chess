@@ -3,13 +3,11 @@ import chess.ChessPiece;
 import chess.PieceDeserializer;
 import chess.PieceSerializer;
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -140,20 +138,23 @@ public class ClientCommunicator {
                 } else if (json.has("gameID")) {
                     return gson.fromJson(json, GameData.class);
                 }
+                else if (json.has("games")){
+                    JsonArray gamesArray = json.getAsJsonArray("games");
+                    ArrayList<GameData> gamesList = new ArrayList<>();
+
+                    for (JsonElement gameElement : gamesArray) {
+                        GameData game = gson.fromJson(gameElement, GameData.class);
+                        gamesList.add(game);
+                    }
+
+                    return gamesList;
+                }
             }
             catch (JsonSyntaxException e){
                 //That's fine
             }
         }
-        else if (json.isJsonArray()){
-            try{
-                Type listType = (new TypeToken<ArrayList<GameData>>(){}).getType();
-                return gson.fromJson(json, listType);
-            }
-            catch (JsonSyntaxException e){
-                //That's fine
-            }
-        }
+
         return null;
     }
 

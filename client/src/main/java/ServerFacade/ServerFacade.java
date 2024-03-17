@@ -35,7 +35,7 @@ public class ServerFacade {
         return (ArrayList<GameData>) communicator.doGet(urlString + "/game", authToken);
     }
 
-    public int facadeCreateGame(String authToken, String gameName) throws IOException, URISyntaxException {
+    public int facadeCreateGame(String authToken, GameData gameName) throws IOException, URISyntaxException {
         return ((GameData) communicator.doPost(urlString+"/game", authToken, gameName)).gameID();
     }
 

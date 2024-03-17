@@ -1,8 +1,10 @@
 package ui;
 
 import ServerFacade.ServerFacade;
+import model.GameData;
 import model.UserData;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
@@ -68,7 +70,6 @@ public class UIMenu {
                 switch(commandNum){
                     case 1:
                         System.out.print("Please enter your username:");
-
                         username = scanner.nextLine();
                         System.out.print("Please enter your password:");
                         password = scanner.nextLine();
@@ -138,10 +139,30 @@ public class UIMenu {
                 commandNum = Integer.parseInt(numbers[0]);
                 switch(commandNum){
                     case 1:
-                        System.out.print("Creating game\n");
+                        System.out.print("Enter the name of your new game:\n");
+                        String gameName = scanner.nextLine();
+                        GameData newGame = new GameData(0, null, null, gameName, null);
+                        try {
+                            int gameID = serverFacade.facadeCreateGame(authToken, newGame);
+                            System.out.print("New game created with ID of " + gameID + '\n');
+                        }
+                        catch (Exception ex){
+                            System.out.print("Sorry, an error was encountered\n");
+                            System.out.print(ex.getMessage());
+                        }
                         break;
                     case 2:
-                        System.out.print("Listing games\n");
+                        System.out.print("Listing games:\n");
+                        try {
+                            ArrayList<GameData> gamesList = serverFacade.facadeGetGames(authToken);
+                            for (GameData game : gamesList){
+                                System.out.print('\n' + game.toString());
+                            }
+                        }
+                        catch (Exception ex){
+                            System.out.print("Sorry, an error was encountered\n");
+                            System.out.print(ex.getMessage());
+                        }
                         break;
                     case 3:
                         System.out.print("Joining game\n");
