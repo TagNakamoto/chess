@@ -2,6 +2,7 @@ package clientTests;
 
 import ServerFacade.ServerFacade;
 import model.AuthData;
+import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.*;
 import server.Server;
@@ -80,6 +81,20 @@ public class ServerFacadeTests {
     @Test
     public void nullLogout() throws Exception{
         assertFalse(serverFacade.facadeLogout(null));
+    }
+
+    @Test
+    public void normalCreateGame() throws Exception{
+        UserData regisObj =new UserData("loginUsername", "loginPassword", "loginEmail");
+        AuthData authData = serverFacade.facadeRegister(regisObj);
+        GameData gameName = new GameData(0,null,null,"Game",null);
+        assertTrue(serverFacade.facadeCreateGame(authData.authToken(), gameName) >1);
+    }
+
+    @Test
+    public void noAuthCreateGame(){
+        GameData gameName = new GameData(0,null,null,"Game",null);
+        assertThrows(Exception.class, ()-> serverFacade.facadeCreateGame(null, gameName));
     }
 
 }
