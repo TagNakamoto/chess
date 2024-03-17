@@ -46,7 +46,7 @@ public class ServerFacade {
         return ((GameData) communicator.doPost(urlString+"/game", authToken, gameName)).gameID();
     }
 
-    public void facadeJoinGame(String authToken, JoinRequest joinRequest) throws IOException, URISyntaxException {
-        communicator.doPut(urlString+"/game", authToken, joinRequest);
+    public boolean facadeJoinGame(String authToken, JoinRequest joinRequest) throws IOException, URISyntaxException {
+        return communicator.doPut(urlString+"/game", authToken, joinRequest);
     }
 }

@@ -35,7 +35,7 @@ public class ClientCommunicator {
 
 
 
-    public Object doPut(String urlString, String authToken, Object bodyObj) throws IOException, URISyntaxException {
+    public boolean doPut(String urlString, String authToken, Object bodyObj) throws IOException, URISyntaxException {
         URI uri = new URI(urlString);
         HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
 
@@ -43,7 +43,8 @@ public class ClientCommunicator {
         connection.setRequestMethod("PUT");
         connection.setDoOutput(true);
 
-        return addHeadersAndBody(authToken, bodyObj, connection);
+        addHeadersAndBody(authToken, bodyObj, connection);
+        return connection.getResponseCode() == HttpURLConnection.HTTP_OK;
     }
 
     public Object doGet(String urlString, String authToken) throws IOException, URISyntaxException {

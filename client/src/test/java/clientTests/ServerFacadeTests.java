@@ -1,6 +1,7 @@
 package clientTests;
 
 import ServerFacade.ServerFacade;
+import dataAccess.JoinRequest;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
@@ -95,6 +96,24 @@ public class ServerFacadeTests {
     public void noAuthCreateGame(){
         GameData gameName = new GameData(0,null,null,"Game",null);
         assertThrows(Exception.class, ()-> serverFacade.facadeCreateGame(null, gameName));
+    }
+
+    @Test
+    public void normalJoinGame() throws Exception{
+        UserData regisObj =new UserData("loginUsername", "loginPassword", "loginEmail");
+        AuthData authData = serverFacade.facadeRegister(regisObj);
+        GameData gameName = new GameData(0,null,null,"Game",null);
+        int gameID = serverFacade.facadeCreateGame(authData.authToken(), gameName);
+        JoinRequest joinRequest = new JoinRequest(null, gameID);
+        assertTrue(serverFacade.facadeJoinGame(authData.authToken(), joinRequest));
+    }
+
+    @Test
+    public void nullJoinGame() throws Exception{
+        UserData regisObj =new UserData("loginUsername", "loginPassword", "loginEmail");
+        AuthData authData = serverFacade.facadeRegister(regisObj);
+        JoinRequest joinRequest = new JoinRequest(null, 0);
+        assertFalse(serverFacade.facadeJoinGame(authData.authToken(), joinRequest));
     }
 
 }
