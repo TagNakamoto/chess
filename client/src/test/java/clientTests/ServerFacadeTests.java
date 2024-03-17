@@ -52,4 +52,20 @@ public class ServerFacadeTests {
 
     }
 
+    @Test
+    public void normalLogin() throws Exception{
+        UserData regisObj =new UserData("loginUsername", "loginPassword", "loginEmail");
+        serverFacade.facadeRegister(regisObj);
+        UserData loginObj =new UserData("loginUsername", "loginPassword", null);
+        AuthData authData = serverFacade.facadeLogin(loginObj);
+        assertTrue(authData.authToken().length() > 10);
+    }
+
+    @Test
+    public void loginDNE() throws Exception{
+        UserData loginObj =new UserData("loginUsername", "loginPassword", null);
+        AuthData authData = serverFacade.facadeLogin(loginObj);
+        assertNull(authData);
+    }
+
 }
