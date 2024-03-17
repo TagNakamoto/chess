@@ -1,19 +1,29 @@
 package clientTests;
 
+import ServerFacade.ServerFacade;
+import model.AuthData;
+import model.UserData;
 import org.junit.jupiter.api.*;
 import server.Server;
-import ui.UIMenu;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ServerFacadeTests {
 
     private static Server server;
+    private static final String urlString = "http://localhost:8080";
+    private static final ServerFacade serverFacade = new ServerFacade(urlString);
 
     @BeforeAll
     public static void init() {
         server = new Server();
-        var port = server.run(0);
+        var port = server.run(8080);
         System.out.println("Started test HTTP server on " + port);
+    }
+
+    @BeforeEach
+    public void clearing() throws Exception{
+        serverFacade.facadeClear();
     }
 
     @AfterAll
@@ -23,11 +33,23 @@ public class ServerFacadeTests {
 
 
     @Test
-    public void sampleTest() {
-        UIMenu menu = new UIMenu();
-        menu.run();
+    public void normalRegister() throws Exception{
+        UserData regisObj =new UserData("registerUsername", "registerPassword", "registerEmail");
+        AuthData authData =  serverFacade.facadeRegister(regisObj);
+        assertTrue(authData.authToken().length() > 10);
+    }
 
-        Assertions.assertTrue(true);
+    @Test
+    public void doubleRegister(){
+        UserData regisObj =new UserData("registerUsername", "registerPassword", "registerEmail");
+        try {
+            serverFacade.facadeRegister(regisObj);
+            assertNull(serverFacade.facadeRegister(regisObj));
+        }
+        catch (Exception ex){
+            fail("Unexpected exception:" + ex.getMessage());
+        }
+
     }
 
 }
