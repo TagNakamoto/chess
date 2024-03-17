@@ -1,5 +1,6 @@
 package ServerFacade;
 
+import dataAccess.JoinRequest;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
@@ -32,14 +33,20 @@ public class ServerFacade {
     }
 
     public ArrayList<GameData> facadeGetGames(String authToken) throws IOException, URISyntaxException {
-        return (ArrayList<GameData>) communicator.doGet(urlString + "/game", authToken);
+        Object gamesList = communicator.doGet(urlString + "/game", authToken);
+        if (gamesList instanceof ArrayList<?>) {
+            @SuppressWarnings("unchecked")
+            ArrayList<GameData> typedGamesList = (ArrayList<GameData>) gamesList;
+            return typedGamesList;
+        }
+        return null;
     }
 
     public int facadeCreateGame(String authToken, GameData gameName) throws IOException, URISyntaxException {
         return ((GameData) communicator.doPost(urlString+"/game", authToken, gameName)).gameID();
     }
 
-    public void facadeJoinGame(String authToken, GameData gameData) throws IOException, URISyntaxException {
-        communicator.doPut(urlString+"/game", authToken, gameData);
+    public void facadeJoinGame(String authToken, JoinRequest joinRequest) throws IOException, URISyntaxException {
+        communicator.doPut(urlString+"/game", authToken, joinRequest);
     }
 }

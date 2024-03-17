@@ -10,6 +10,7 @@ import static ui.EscapeSequences.*;
 public class UIChessBoard {
     private static final int BUFFER_SIZE = 3;
     private static final String SPACER = " ";
+    private static final String[][] startBoard = new ChessBoard().boardToStringArray();
     public static void main(String[] args) {
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
         out.print(ERASE_SCREEN);
@@ -19,6 +20,18 @@ public class UIChessBoard {
         setDarkGrayBorder(out);
         out.print('\n');
         printBlackBoard(out, board.boardToStringArray());
+    }
+    public static void printStartWhiteBlack(PrintStream out){
+        printStartWhite(out);
+        printStartBlack(out);
+//        resetEverything(out);
+    }
+    public static void printStartWhite(PrintStream out){
+        printWhiteBoard(out, startBoard);
+    }
+
+    public static void printStartBlack(PrintStream out){
+        printBlackBoard(out, startBoard);
     }
 
     private static void setLightGrayBorder(PrintStream out) {
@@ -84,7 +97,7 @@ public class UIChessBoard {
         }
         printSquare(out, c);
     }
-    private static void printWhiteBoard(PrintStream out, String[][] piecesLetter){
+    public static void printWhiteBoard(PrintStream out, String[][] piecesLetter){
         out.print(SET_TEXT_BOLD);
         drawTopBottom(out);
         setDarkGrayBorder(out);
@@ -112,7 +125,7 @@ public class UIChessBoard {
         out.print("\n");
     }
 
-    private static void printBlackBoard(PrintStream out, String[][] piecesLetter){
+    public static void printBlackBoard(PrintStream out, String[][] piecesLetter){
         out.print(SET_TEXT_BOLD);
         drawTopBottom(out);
         setDarkGrayBorder(out);
@@ -139,5 +152,14 @@ public class UIChessBoard {
         drawTopBottom(out);
         setDarkGrayBorder(out);
         out.print("\n");
+    }
+
+    private static void resetEverything(PrintStream out){
+        out.print(RESET_TEXT_ITALIC);
+        out.print(RESET_BG_COLOR);
+        out.print(RESET_TEXT_BLINKING);
+        out.print(RESET_TEXT_COLOR);
+        out.print(RESET_TEXT_UNDERLINE);
+        out.print(RESET_TEXT_BOLD_FAINT);
     }
 }

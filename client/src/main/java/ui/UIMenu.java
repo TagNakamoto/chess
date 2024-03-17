@@ -1,9 +1,14 @@
 package ui;
 
 import ServerFacade.ServerFacade;
+import dataAccess.JoinRequest;
 import model.GameData;
 import model.UserData;
 
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -119,11 +124,16 @@ public class UIMenu {
                         System.out.print("Exiting Chess Program\n");
                         running = false;
                         break;
+                    case 14:
+                        System.out.print("You were not supposed to find this easter egg\n");
+                        serverFacade.facadeClear();
 
                 }
 
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. The first part of the line is not a valid number.");
+            } catch (IOException | URISyntaxException e) {
+                throw new RuntimeException(e);
             }
         } else {
             System.out.println("No numbers found in the input line.");
@@ -134,6 +144,7 @@ public class UIMenu {
         String line = scanner.nextLine();
         var numbers = line.split(" ");
         int commandNum;
+        var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
         if (numbers.length > 0) {
             try {
                 commandNum = Integer.parseInt(numbers[0]);
@@ -165,10 +176,36 @@ public class UIMenu {
                         }
                         break;
                     case 3:
-                        System.out.print("Joining game\n");
+                        System.out.print("Enter the game ID number of the game you would like to join:\n");
+                        int gameID = Integer.parseInt(scanner.nextLine());
+                        System.out.print("Enter the color you would like to join as (BLACK/WHITE):\n");
+                        String playerColor = scanner.nextLine();
+                        JoinRequest joinRequest = new JoinRequest(playerColor,gameID);
+                        UIChessBoard.printStartWhiteBlack(out);
+                        try {
+                            serverFacade.facadeJoinGame(authToken, joinRequest);
+                            System.out.print("Joined game " + gameID +  " as " + playerColor + '\n');
+
+                        }
+                        catch (Exception ex){
+                            System.out.print("Sorry, an error was encountered\n");
+                            System.out.print(ex.getMessage());
+                        }
                         break;
                     case 4:
-                        System.out.print("Observing game\n");
+                        System.out.print("Enter the game ID number of the game you would like to join:\n");
+                        gameID = Integer.parseInt(scanner.nextLine());
+                        joinRequest = new JoinRequest(null,gameID);
+
+                        try {
+                            serverFacade.facadeJoinGame(authToken, joinRequest);
+                            System.out.print("Observing game " + gameID + '\n');
+                            UIChessBoard.printStartWhiteBlack(out);
+                        }
+                        catch (Exception ex){
+                            System.out.print("Sorry, an error was encountered\n");
+                            System.out.print(ex.getMessage());
+                        }
                         break;
                     case 5:
                         System.out.print("""
@@ -185,8 +222,17 @@ public class UIMenu {
                         scanner.nextLine();
                         break;
                     case 6:
+                        try {
+                        serverFacade.facadeLogout(authToken);
                         System.out.print("Logging out\n");
                         state = State.SIGNEDOUT;
+                        authToken=null;
+                        }
+                        catch (Exception ex){
+                        System.out.print("Sorry, an error was encountered\n");
+                        System.out.print(ex.getMessage());
+                        }
+                        break;
                 }
 
             } catch (NumberFormatException e) {

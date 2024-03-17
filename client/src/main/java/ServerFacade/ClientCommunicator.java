@@ -41,7 +41,7 @@ public class ClientCommunicator {
 
         connection.setReadTimeout(5000);
         connection.setRequestMethod("PUT");
-        connection.setDoOutput(false);
+        connection.setDoOutput(true);
 
         return addHeadersAndBody(authToken, bodyObj, connection);
     }
@@ -90,7 +90,11 @@ public class ClientCommunicator {
             }
             //builder is now the response body text
             //return the deserialized object
-            return bodyDecoder(builder.toString());
+            if (builder.toString().isEmpty()) {
+                return null;
+            } else {
+                return bodyDecoder(builder.toString());
+            }
 
         } else {
             InputStream responseBody = connection.getErrorStream();
