@@ -28,8 +28,8 @@ public class ServerFacade {
         return (AuthData) communicator.doPost(urlString+"/session", null, u);
     }
 
-    public void facadeLogout(String authToken) throws IOException, URISyntaxException {
-        communicator.doDelete(urlString+"/session", authToken);
+    public boolean facadeLogout(String authToken) throws IOException, URISyntaxException {
+        return communicator.doDelete(urlString+"/session", authToken);
     }
 
     public ArrayList<GameData> facadeGetGames(String authToken) throws IOException, URISyntaxException {

@@ -68,4 +68,18 @@ public class ServerFacadeTests {
         assertNull(authData);
     }
 
+    @Test
+    public void normalLogout() throws Exception{
+        UserData regisObj =new UserData("loginUsername", "loginPassword", "loginEmail");
+        serverFacade.facadeRegister(regisObj);
+        UserData loginObj =new UserData("loginUsername", "loginPassword", null);
+        AuthData authData = serverFacade.facadeLogin(loginObj);
+        assertTrue(serverFacade.facadeLogout(authData.authToken()));
+    }
+
+    @Test
+    public void nullLogout() throws Exception{
+        assertFalse(serverFacade.facadeLogout(null));
+    }
+
 }
