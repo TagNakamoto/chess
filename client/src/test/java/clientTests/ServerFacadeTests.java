@@ -116,4 +116,20 @@ public class ServerFacadeTests {
         assertFalse(serverFacade.facadeJoinGame(authData.authToken(), joinRequest));
     }
 
+    @Test
+    public void normalListGame() throws Exception{
+        UserData regisObj =new UserData("loginUsername", "loginPassword", "loginEmail");
+        AuthData authData = serverFacade.facadeRegister(regisObj);
+        GameData gameName = new GameData(0,null,null,"Game",null);
+        serverFacade.facadeCreateGame(authData.authToken(), gameName);
+        assertFalse(serverFacade.facadeGetGames(authData.authToken()).isEmpty());
+    }
+
+    @Test
+    public void noGamesListGame() throws Exception{
+        UserData regisObj = new UserData("loginUsername", "loginPassword", "loginEmail");
+        AuthData authData = serverFacade.facadeRegister(regisObj);
+        assertTrue(serverFacade.facadeGetGames(authData.authToken()).isEmpty());
+    }
+
 }
