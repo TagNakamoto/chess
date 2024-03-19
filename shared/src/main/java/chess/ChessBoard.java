@@ -103,7 +103,7 @@ public class ChessBoard {
                     pieceLetterArray[row][col] = squares[row][col].toString();
                 } else {
                     // If no piece is present, represent an empty square
-                    pieceLetterArray[row][col] = " ";
+                    pieceLetterArray[row][col] = " "; //Look into other forms of whitespace
                 }
             }
         }

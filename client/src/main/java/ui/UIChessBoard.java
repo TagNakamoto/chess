@@ -122,6 +122,8 @@ public class UIChessBoard {
         out.print("\n");
         drawTopBottom(out);
         setDarkGrayBorder(out);
+        out.print(SET_TEXT_COLOR_WHITE);
+        out.print(RESET_TEXT_BOLD_FAINT);
         out.print("\n");
     }
 
@@ -151,6 +153,8 @@ public class UIChessBoard {
         out.print("\n");
         drawTopBottom(out);
         setDarkGrayBorder(out);
+        out.print(SET_TEXT_COLOR_WHITE);
+        out.print(RESET_TEXT_BOLD_FAINT);
         out.print("\n");
     }
 

@@ -124,6 +124,13 @@ public class ChessPiece implements Cloneable {
             case BISHOP -> pieceColor == ChessGame.TeamColor.WHITE ? "B":"b";//"♗" : "♝";
             case KNIGHT -> pieceColor == ChessGame.TeamColor.WHITE ? "N":"n";//"♘" : "♞";
             case PAWN -> pieceColor == ChessGame.TeamColor.WHITE ? "P":"p";//"♙" : "♟";
+
+//            case KING -> pieceColor == ChessGame.TeamColor.WHITE ? "♔" : "♚";
+//            case QUEEN -> pieceColor == ChessGame.TeamColor.WHITE ? "♕" : "♛";
+//            case ROOK -> pieceColor == ChessGame.TeamColor.WHITE ? "♖" : "♜";
+//            case BISHOP -> pieceColor == ChessGame.TeamColor.WHITE ? "♗" : "♝";
+//            case KNIGHT -> pieceColor == ChessGame.TeamColor.WHITE ? "♘" : "♞";
+//            case PAWN -> pieceColor == ChessGame.TeamColor.WHITE ? "♙" : "♟";
         };
 
     }
