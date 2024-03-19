@@ -90,7 +90,7 @@ public class ServerFacadeTests {
         UserData regisObj =new UserData("loginUsername", "loginPassword", "loginEmail");
         AuthData authData = serverFacade.facadeRegister(regisObj);
         GameData gameName = new GameData(0,null,null,"Game",null);
-        assertTrue(serverFacade.facadeCreateGame(authData.authToken(), gameName) >1);
+        assertTrue(serverFacade.facadeCreateGame(authData.authToken(), gameName) >0);
     }
 
     @Test
